@@ -11,7 +11,7 @@ Quick-start development settings - unsuitable for production
 - See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 """
 
-
+import os
 import configparser
 from pathlib import Path
 
@@ -56,7 +56,7 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
