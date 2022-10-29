@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+    <br/><br/>
+    <div class="content-section mb-3">
+        <form method="POST">
+            {% csrf_token %}
+
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Sign up<legend>
+            </fieldset>
+
+            {{ form }}
+
+            <div class="form-group">
+                <button class="btn btn-secondary">Sign up</button>
+            </div>
+        </form>
+
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Have an account? <a class="ml-2" href="#">sign in</a>
+            </small>
+        </div>
+    </div>
+{% endblock %}
+
