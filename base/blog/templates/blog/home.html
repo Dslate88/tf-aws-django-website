@@ -12,12 +12,10 @@
     {% for post in post_list %}
     <div class="col d-flex justify-content-center mb-5">
         <div class="card" style="width: 45rem;">
+            <div class="card-header">{{ post.title }}</div>
           <div class="card-body">
-            <h3 class="card-title">{{ post.title }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted"> -- {{ post.author }}: {{ post.date_posted|date:"M d, Y" }} </h6>
             <p class="card-text">{{ post.body }}</p>
-            <a href="#" class="card-link">Card link</a>
-            <h1></h1>
+            <a href="#" class="card-link">Read More</a>
           </div>
         </div>
     </div>
