@@ -1,15 +1,16 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign up{% endblock %}
+{% block title %}signup - devinslate.com{% endblock %}
 
 {% block content %}
+<div class="col d-flex justify-content-center mt-5">
     <br/><br/>
     <div class="content-section mb-3">
         <form method="POST">
             {% csrf_token %}
 
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Sign up<legend>
+                <legend class="border-bottom mb-4">Create an account<legend>
             </fieldset>
 
             {{ form }}
@@ -25,5 +26,6 @@
             </small>
         </div>
     </div>
+</div
 {% endblock %}
 
