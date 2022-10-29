@@ -1,6 +1,9 @@
 # config ignore
 base/config.ini
 
+# mac ds_store
+**.DS_STORE**
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
