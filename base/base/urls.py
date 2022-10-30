@@ -20,6 +20,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("blog/", include("blog.urls")),
     path(
+        "profile/",
+        v.UserRegister.as_view(template_name="users/profile.html"),
+        name="user-profile",
+    ),
+    path(
         "register/",
         v.UserRegister.as_view(template_name="users/register.html"),
         name="user-register",
