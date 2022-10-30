@@ -2,9 +2,11 @@
 base URL Configuration
 
 urls:
-    - admin: provided admin capability
-    - blog:  custom blog application
-    - users: custom blog application
+    - admin:    provided admin capability
+    - blog:     blog application [/home, /about]
+    - register: users app new user account creation
+    - login:    users app user sign in
+    - logout:   users app user sign out
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
