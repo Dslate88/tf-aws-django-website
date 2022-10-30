@@ -21,7 +21,7 @@ urlpatterns = [
     path("blog/", include("blog.urls")),
     path(
         "profile/",
-        v.UserRegister.as_view(template_name="users/profile.html"),
+        v.UserProfile.as_view(template_name="users/profile.html"),
         name="user-profile",
     ),
     path(
