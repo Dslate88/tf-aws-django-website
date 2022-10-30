@@ -35,6 +35,7 @@ USE_TZ = config["SETTINGS"]["USE_TZ"]
 WSGI_APPLICATION = config["SETTINGS"]["WSGI_APPLICATION"]
 LOGIN_REDIRECT_URL = config["SETTINGS"]["LOGIN_REDIRECT_URL"]
 LOGOUT_REDIRECT_URL = config["SETTINGS"]["LOGOUT_REDIRECT_URL"]
+CRISPY_TEMPLATE_PACK = config["SETTINGS"]["CRISPY_TEMPLATE_PACK"]
 
 
 INSTALLED_APPS = [
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "blog.apps.BlogConfig",
     "users.apps.UsersConfig",
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [
