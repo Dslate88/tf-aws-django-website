@@ -15,7 +15,6 @@ from users import views as v
 
 urlpatterns = [
     path("", include("blog.urls")),  # temporary
-    path("users/", include("django.contrib.auth.urls")),
     path("admin/", admin.site.urls),
     path("blog/", include("blog.urls")),
     path(
