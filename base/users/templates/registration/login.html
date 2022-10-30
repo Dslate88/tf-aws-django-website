@@ -3,16 +3,23 @@
 {% block title %}User Login{% endblock %}
 
 {% block content %}
+
+<div class="col d-flex justify-content-center mt-5">
     <h1>Login</h1>
+</div
 
-    <br/><br/>
-
-    <div class="mb-3">
+<html>
+  <body>
+    <div class="col d-flex justify-content-center mt-5">
         <form method="POST">
             {% csrf_token %}
             {{ form.as_p }}
             <button class="btn btn-secondary">Login</button>
+        </form>
     </div>
+  </body>
+</html>
+
 {% endblock %}
 
 
