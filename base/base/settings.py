@@ -33,6 +33,9 @@ TIME_ZONE = config["SETTINGS"]["TIME_ZONE"]
 USE_I18N = config["SETTINGS"]["USE_I18N"]
 USE_TZ = config["SETTINGS"]["USE_TZ"]
 WSGI_APPLICATION = config["SETTINGS"]["WSGI_APPLICATION"]
+LOGIN_REDIRECT_URL = config["SETTINGS"]["LOGIN_REDIRECT_URL"]
+CRISPY_TEMPLATE_PACK = config["SETTINGS"]["CRISPY_TEMPLATE_PACK"]
+
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -42,6 +45,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "blog.apps.BlogConfig",
+    "users.apps.UsersConfig",
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [

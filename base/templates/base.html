@@ -13,9 +13,10 @@
         {% block title %}devinslate.com{% endblock %}
     </title>
   </head>
-<body>
+</html>
 
 <!-- Bootstrap nav bar -->
+<body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
 
@@ -30,6 +31,34 @@
     <!-- navbar components -->
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+
+
+        {% if user.is_authenticated %}
+
+        <!-- logout -->
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url "user-logout" %}">Logout</a>
+        </li>
+
+        <!-- profile -->
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url "user-profile" %}">Profile</a>
+        </li>
+
+        {% else %}
+
+        <!-- login -->
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url "user-login" %}">Login</a>
+        </li>
+
+        <!-- registration -->
+        <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url "user-register" %}">Register</a>
+        </li>
+
+        {% endif %}
 
         <!-- blog_link -->
         <li class="nav-item">
