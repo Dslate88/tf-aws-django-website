@@ -8,6 +8,8 @@ urls:
     - login:    users app user sign in
     - logout:   users app user sign out
 """
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
@@ -39,4 +41,7 @@ urlpatterns = [
         auth_views.LogoutView.as_view(template_name="users/logout.html"),
         name="user-logout",
     ),
-]
+    # django documented recommended pattern
+    # if debug==True then this evaluates
+    # TODO: refactor all this for S3, both local and production
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
