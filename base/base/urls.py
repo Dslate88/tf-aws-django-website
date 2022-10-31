@@ -41,9 +41,7 @@ urlpatterns = [
         auth_views.LogoutView.as_view(template_name="users/logout.html"),
         name="user-logout",
     ),
-]
-
-# django documented recommended pattern
-# if debug==True then this evaluates
-# TODO: refactor all this for S3, both local and production
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # django documented recommended pattern
+    # if debug==True then this evaluates
+    # TODO: refactor all this for S3, both local and production
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
