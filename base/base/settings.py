@@ -18,6 +18,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 config = configparser.ConfigParser()
 config.read(BASE_DIR / "config.ini")
 
@@ -35,7 +36,7 @@ USE_TZ = config["LOCAL"]["USE_TZ"]
 WSGI_APPLICATION = config["LOCAL"]["WSGI_APPLICATION"]
 LOGIN_REDIRECT_URL = config["LOCAL"]["LOGIN_REDIRECT_URL"]
 CRISPY_TEMPLATE_PACK = config["LOCAL"]["CRISPY_TEMPLATE_PACK"]
-MEDIA_ROOT = config["LOCAL"]["MEDIA_ROOT"]
+MEDIA_ROOT = os.path.join(BASE_DIR, config["LOCAL"]["MEDIA_ROOT"])
 MEDIA_URL = config["LOCAL"]["MEDIA_URL"]
 
 
