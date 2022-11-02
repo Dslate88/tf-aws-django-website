@@ -11,7 +11,7 @@ class UserRegister(SuccessMessageMixin, generic.CreateView):
     form_class = UserRegisterForm
     template_name = "users/register.html"
     success_url = reverse_lazy("user-login")
-    success_message = "%(username)s was created successfully"
+    success_message = "Hey %(username)s, your account was created!"
 
 
 class UserProfile(LoginRequiredMixin, generic.TemplateView):
