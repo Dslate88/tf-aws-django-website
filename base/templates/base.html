@@ -103,13 +103,17 @@
 
     <!-- Message display -->
     <div class="col d-flex justify-content-center mt-5">
-        {% if messages %}
-        <ul class="messages">
+        <div class="col-md-8">
+          {% if messages %}
+            <ul class="messages">
             {% for message in messages %}
-            <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>{{ message }}</li>
+              <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+              </div>
             {% endfor %}
-        </ul>
-        {% endif %}
+            </ul>
+          {% endif %}
+        </div>
     </div>
 
     <!-- base end, inheritance begin -->
