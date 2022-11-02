@@ -17,99 +17,101 @@
 
 <!-- Bootstrap nav bar -->
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
+<header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
 
-    <!-- navbar name, route about -->
-    <a class="navbar-brand" href="{% url "blog-about" %}">ABOUT_PAGE</a> <!-- TODO: create page -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <!-- navbar name, route about -->
+        <a class="navbar-brand" href="{% url "blog-about" %}">ABOUT_PAGE</a> <!-- TODO: create page -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
 
-    <!-- navbar components -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <!-- navbar components -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
 
 
-        {% if user.is_authenticated %}
+            {% if user.is_authenticated %}
 
-        <!-- logout -->
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url "user-logout" %}">Logout</a>
-        </li>
+            <!-- logout -->
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url "user-logout" %}">Logout</a>
+            </li>
 
-        <!-- profile -->
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url "user-profile" %}">Profile</a>
-        </li>
+            <!-- profile -->
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url "user-profile" %}">Profile</a>
+            </li>
 
-        {% else %}
+            {% else %}
 
-        <!-- login -->
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url "user-login" %}">Login</a>
-        </li>
+            <!-- login -->
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url "user-login" %}">Login</a>
+            </li>
 
-        <!-- registration -->
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url "user-register" %}">Register</a>
-        </li>
+            <!-- registration -->
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url "user-register" %}">Register</a>
+            </li>
 
-        {% endif %}
+            {% endif %}
 
-        <!-- blog_link -->
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url "blog-home" %}">Blog</a>
-        </li>
+            <!-- blog_link -->
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url "blog-home" %}">Blog</a>
+            </li>
 
-        <!-- project dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-              role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            project_list
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">project1</a></li>
-            <li><a class="dropdown-item" href="#">project2</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">project_others</a></li>
+            <!-- project dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+                  role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                project_list
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">project1</a></li>
+                <li><a class="dropdown-item" href="#">project2</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">project_others</a></li>
+              </ul>
+            </li>
+
+            <!-- disabled link (user permissions?) -->
+            <!-- potential location for joke link/idea -->
+            <li class="nav-item">
+              <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
           </ul>
-        </li>
 
-        <!-- disabled link (user permissions?) -->
-        <!-- potential location for joke link/idea -->
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
+            <!-- search ability  -->
+          <form class="d-flex">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+</header>
 
-        <!-- search ability  -->
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-</nav>
-
-    <!-- Message display -->
-  <div class="container-fluid">
-    <div class="col-md-8">
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
-            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
-            {{ message }}
-        </li>
-        {% endfor %}
-    </ul>
-    </div>
-    {% endif %}
-    </div>
+        <!-- Message display -->
+      <div class="container-fluid">
+        <div class="col-md-8">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                {{ message }}
+            </li>
+            {% endfor %}
+        </ul>
+        </div>
+        {% endif %}
+        </div>
 
 
 
