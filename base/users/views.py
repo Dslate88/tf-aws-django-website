@@ -8,6 +8,10 @@ from .forms import UserRegisterForm
 
 
 class UserRegister(SuccessMessageMixin, generic.CreateView):
+    """
+    Render form and return http response for user registration
+    """
+
     form_class = UserRegisterForm
     template_name = "users/register.html"
     success_url = reverse_lazy("user-login")
@@ -16,6 +20,8 @@ class UserRegister(SuccessMessageMixin, generic.CreateView):
 
 class UserProfile(LoginRequiredMixin, generic.TemplateView):
     """
+    Render form and return http response for Profile access
+
     TODO: finish, include image upload, backend s3
     TODO: needs custom data model to handle additional fields into forms?
     """
