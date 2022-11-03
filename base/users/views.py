@@ -4,7 +4,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
-from .forms import UserRegisterForm
+# from base.users.models import Profile
+
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from django.views.generic.detail import SingleObjectMixin
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 
 
 class UserRegister(SuccessMessageMixin, generic.CreateView):
@@ -18,7 +22,7 @@ class UserRegister(SuccessMessageMixin, generic.CreateView):
     success_message = "Hey %(username)s, your account was created!"
 
 
-class UserProfile(LoginRequiredMixin, generic.TemplateView):
+class UserProfile(LoginRequiredMixin, generic.ListView):
     """
     Render form and return http response for Profile access
 
