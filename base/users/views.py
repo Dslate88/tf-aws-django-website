@@ -6,7 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 # from base.users.models import Profile
 
-from .forms import UserRegisterForm, UserUpdateForm  # , ProfileUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 
 class UserRegisterView(SuccessMessageMixin, generic.CreateView):
@@ -36,6 +36,9 @@ class UserProfileView(LoginRequiredMixin, generic.ListView):
 class UserProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     """ """
 
+    # need to manually create context here...merge user form fields and render to html?
+
     model = User
     template_name = "users/profile_update.html"
+    success_url = reverse_lazy("user-profile")
     form_class = UserUpdateForm
