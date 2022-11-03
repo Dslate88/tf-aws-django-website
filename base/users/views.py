@@ -6,9 +6,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 
 # from base.users.models import Profile
 
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from django.views.generic.detail import SingleObjectMixin
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from .forms import UserRegisterForm, UserUpdateForm  # , ProfileUpdateForm
 
 
 class UserRegisterView(SuccessMessageMixin, generic.CreateView):
@@ -30,6 +28,14 @@ class UserProfileView(LoginRequiredMixin, generic.ListView):
     TODO: needs custom data model to handle additional fields into forms?
     """
 
-    login_url = "user-login"
     model = User
     template_name = "users/profile.html"
+    login_url = "user-login"
+
+
+class UserProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+    """ """
+
+    model = User
+    template_name = "users/profile.html"
+    form_class = UserUpdateForm
