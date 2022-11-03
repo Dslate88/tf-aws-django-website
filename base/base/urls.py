@@ -28,7 +28,7 @@ urlpatterns = [
     ),
     path(
         "profile/update/<int:pk>",
-        v.UserProfileUpdateView.as_view(template_name="users/profile.html"),
+        v.UserProfileUpdateView.as_view(template_name="users/profile_update.html"),
         name="update-user-profile",
     ),
     path(

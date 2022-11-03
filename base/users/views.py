@@ -37,5 +37,5 @@ class UserProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
     """ """
 
     model = User
-    template_name = "users/profile.html"
+    template_name = "users/profile_update.html"
     form_class = UserUpdateForm
