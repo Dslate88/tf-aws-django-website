@@ -11,7 +11,7 @@ from django.views.generic.detail import SingleObjectMixin
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 
 
-class UserRegister(SuccessMessageMixin, generic.CreateView):
+class UserRegisterView(SuccessMessageMixin, generic.CreateView):
     """
     Render form and return http response for user registration
     """
@@ -22,7 +22,7 @@ class UserRegister(SuccessMessageMixin, generic.CreateView):
     success_message = "Hey %(username)s, your account was created!"
 
 
-class UserProfile(LoginRequiredMixin, generic.ListView):
+class UserProfileView(LoginRequiredMixin, generic.ListView):
     """
     Render form and return http response for Profile access
 

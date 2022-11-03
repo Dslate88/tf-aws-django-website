@@ -23,12 +23,12 @@ urlpatterns = [
     path("blog/", include("blog.urls")),
     path(
         "profile/",
-        v.UserProfile.as_view(template_name="users/profile.html"),
+        v.UserProfileView.as_view(template_name="users/profile.html"),
         name="user-profile",
     ),
     path(
         "register/",
-        v.UserRegister.as_view(template_name="users/register.html"),
+        v.UserRegisterView.as_view(template_name="users/register.html"),
         name="user-register",
     ),
     path(
