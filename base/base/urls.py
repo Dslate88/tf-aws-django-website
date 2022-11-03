@@ -23,12 +23,17 @@ urlpatterns = [
     path("blog/", include("blog.urls")),
     path(
         "profile/",
-        v.UserProfile.as_view(template_name="users/profile.html"),
+        v.UserProfileView.as_view(template_name="users/profile.html"),
         name="user-profile",
     ),
     path(
+        "profile/update/<int:pk>",
+        v.UserProfileUpdateView.as_view(template_name="users/profile_update.html"),
+        name="update-user-profile",
+    ),
+    path(
         "register/",
-        v.UserRegister.as_view(template_name="users/register.html"),
+        v.UserRegisterView.as_view(template_name="users/register.html"),
         name="user-register",
     ),
     path(
