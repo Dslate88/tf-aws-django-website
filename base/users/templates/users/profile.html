@@ -12,7 +12,8 @@
         </div>
       </div>
 
-    <form method="POST" enctype="multipart/form-data">
+
+    <form action="" enctype="multipart/form-data" method="POST">
         {% csrf_token %}
 
         <fieldset class="form-group">
@@ -21,7 +22,7 @@
 
         {{ form|crispy }}
 
-      {% if user.is_authenticated %}
+      {% if user.is_authenticated %} <!-- useless? -->
         <div class="form-group">
           <a class="navbar-brand mr-4" href="{% url 'update-user-profile' user.pk %}">Update User Profile</a>
         </div>
