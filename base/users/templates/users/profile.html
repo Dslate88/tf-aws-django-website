@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="content-section">
+
+<div class="content-section">
 
       <div class="media">
         <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
@@ -20,10 +21,13 @@
 
         {{ form|crispy }}
 
+      {% if user.is_authenticated %}
         <div class="form-group">
-            <button class="btn btn-secondary">Update</button>
+          <a class="navbar-brand mr-4" href="{% url 'update-user-profile' user.pk %}">Update User Profile</a>
         </div>
+      {% endif %}
+
     </form>
 
-    </div>
+</div>
 {% endblock content %}
