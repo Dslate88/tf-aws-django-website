@@ -14,7 +14,8 @@
     <div class="col d-flex justify-content-center mt-5">
         <form method="POST">
             {% csrf_token %}
-            {{ form|crispy }}
+            {{ user_form|crispy }}
+            {{ profile_form|crispy }}
             <button class="btn btn-secondary mt-3">Update</button>
         </form>
     </div>
