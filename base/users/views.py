@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 
 # from users.models import Profile
@@ -33,7 +33,10 @@ class UserProfileView(LoginRequiredMixin, generic.ListView):
     login_url = "user-login"
 
 
-class UserProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
+class UserProfileUpdateView(
+    UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView
+):
+    # TODO: implement post method, dual form validation and saving
     """
     Render user and profile forms
     """
@@ -47,3 +50,9 @@ class UserProfileUpdateView(LoginRequiredMixin, generic.UpdateView):
         context = super().get_context_data(**kwargs)
         context["profile_form"] = ProfileUpdateForm()
         return context
+
+    def test_func(self):
+        user = self.get_object()
+        if self.request.user == user:
+            return True
+        return False
