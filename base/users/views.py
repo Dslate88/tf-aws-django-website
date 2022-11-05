@@ -19,11 +19,12 @@ class UserRegisterView(SuccessMessageMixin, generic.CreateView):
     success_message = "Hey %(username)s, your account was created!"
 
 
-class UserProfileView(generic.View):
+class UserProfileView(SuccessMessageMixin, generic.View):
     template_name = "users/profile.html"
     user_form_class = UserUpdateForm
     profile_form_class = ProfileUpdateForm
     success_url = reverse_lazy("user-profile")
+    success_message = "Hey %(username)s, your account was updated!"
 
     def get(self, request, *args, **kwargs):
         user_form = self.user_form_class(instance=request.user)
