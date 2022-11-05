@@ -7,6 +7,8 @@ from django.contrib.messages.views import SuccessMessageMixin
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from django.shortcuts import render, redirect
 
+from django.contrib import messages
+
 
 class UserRegisterView(SuccessMessageMixin, generic.CreateView):
     """
@@ -19,10 +21,11 @@ class UserRegisterView(SuccessMessageMixin, generic.CreateView):
     success_message = "Hey %(username)s, your account was created!"
 
 
-class UserProfileView(SuccessMessageMixin, generic.View):
+class UserProfileView(generic.View):
     template_name = "users/profile.html"
     user_form_class = UserUpdateForm
     profile_form_class = ProfileUpdateForm
+
     success_url = reverse_lazy("user-profile")
     success_message = "Hey %(username)s, your account was updated!"
 
@@ -44,6 +47,7 @@ class UserProfileView(SuccessMessageMixin, generic.View):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            messages.success(request, "Profile details updated.")
             return redirect(self.success_url)
         else:
             return render(
