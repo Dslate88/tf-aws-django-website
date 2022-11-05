@@ -1,10 +1,9 @@
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.messages.views import SuccessMessageMixin
 
-# from users.models import Profile
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 
 
@@ -13,46 +12,49 @@ class UserRegisterView(SuccessMessageMixin, generic.CreateView):
     Render form and return http response for user registration
     """
 
-    form_class = UserRegisterForm
     template_name = "users/register.html"
+    form_class = UserRegisterForm
     success_url = reverse_lazy("user-login")
     success_message = "Hey %(username)s, your account was created!"
 
 
-class UserProfileView(LoginRequiredMixin, generic.ListView):
+class UserProfileView(generic.View):
     """
-    Render form
-    Return http response for Profile access
+    Enables 1(view):1(url) mapping for both get and post requests.
 
-    TODO: finish, include image upload, backend s3
-    TODO: needs custom data model to handle additional fields into forms?
+    Forms:
+        - ProfileUpdateForm
+        - UserUpdateForm
     """
 
-    model = User
     template_name = "users/profile.html"
-    login_url = "user-login"
-
-
-class UserProfileUpdateView(
-    UserPassesTestMixin, LoginRequiredMixin, generic.UpdateView
-):
-    # TODO: implement post method, dual form validation and saving
-    """
-    Render user and profile forms
-    """
-
-    model = User
-    template_name = "users/profile_update.html"
+    user_form_class = UserUpdateForm
+    profile_form_class = ProfileUpdateForm
     success_url = reverse_lazy("user-profile")
-    form_class = UserUpdateForm
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["profile_form"] = ProfileUpdateForm()
-        return context
+    def get(self, request, *args, **kwargs):
+        user_form = self.user_form_class(instance=request.user)
+        profile_form = self.profile_form_class(instance=request.user.profile)
+        return render(
+            request,
+            self.template_name,
+            {"user_form": user_form, "profile_form": profile_form},
+        )
 
-    def test_func(self):
-        user = self.get_object()
-        if self.request.user == user:
-            return True
-        return False
+    def post(self, request, *args, **kwargs):
+        user_form = self.user_form_class(request.POST, instance=request.user)
+        profile_form = self.profile_form_class(
+            request.POST, request.FILES, instance=request.user.profile
+        )
+
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Profile details updated.")
+            return redirect(self.success_url)
+        else:
+            return render(
+                request,
+                self.template_name,
+                {"user_form": user_form, "profile_form": profile_form},
+            )
