@@ -27,11 +27,6 @@ urlpatterns = [
         name="user-profile",
     ),
     path(
-        "profile/update/<int:pk>",  # TODO: how to pk==user.pk
-        v.UserProfileUpdateView.as_view(template_name="users/profile_update.html"),
-        name="update-user-profile",
-    ),
-    path(
         "register/",
         v.UserRegisterView.as_view(template_name="users/register.html"),
         name="user-register",
