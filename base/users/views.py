@@ -22,6 +22,14 @@ class UserRegisterView(SuccessMessageMixin, generic.CreateView):
 
 
 class UserProfileView(generic.View):
+    """
+    Enables 1(view):1(url) mapping for both get and post requests.
+
+    Forms:
+        - ProfileUpdateForm
+        - UserUpdateForm
+    """
+
     template_name = "users/profile.html"
     user_form_class = UserUpdateForm
     profile_form_class = ProfileUpdateForm
