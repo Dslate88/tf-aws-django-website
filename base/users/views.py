@@ -1,13 +1,10 @@
+from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import generic
-from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.messages.views import SuccessMessageMixin
 
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from django.shortcuts import render, redirect
-
-from django.contrib import messages
 
 
 class UserRegisterView(SuccessMessageMixin, generic.CreateView):
@@ -15,8 +12,8 @@ class UserRegisterView(SuccessMessageMixin, generic.CreateView):
     Render form and return http response for user registration
     """
 
-    form_class = UserRegisterForm
     template_name = "users/register.html"
+    form_class = UserRegisterForm
     success_url = reverse_lazy("user-login")
     success_message = "Hey %(username)s, your account was created!"
 
@@ -33,9 +30,7 @@ class UserProfileView(generic.View):
     template_name = "users/profile.html"
     user_form_class = UserUpdateForm
     profile_form_class = ProfileUpdateForm
-
     success_url = reverse_lazy("user-profile")
-    success_message = "Hey %(username)s, your account was updated!"
 
     def get(self, request, *args, **kwargs):
         user_form = self.user_form_class(instance=request.user)
