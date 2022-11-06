@@ -7,9 +7,9 @@ WORKDIR /app
 RUN apk update && \
     apk upgrade && \
 	  apk add git && \
-	  apk add vim && \ # rm me?
-      # TODO: install off compiled hashes? check-in/test this...
+	  apk add vim && \
       git clone --depth=1 https://github.com/Dslate88/dotfiles.git
+      # TODO: install off compiled hashes? check-in/test this...
 
 # bypass alpine issue with pillow
 COPY ./requirements.txt /requirements.txt
