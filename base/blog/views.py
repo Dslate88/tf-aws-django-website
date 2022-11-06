@@ -27,7 +27,7 @@ class PostDetailView(generic.DetailView):
 class PostCreateView(generic.CreateView):
     model = Post
     fields = ["title", "body"]
-    template_name = "blog/post_create.html"
+    template_name = "blog/post_form.html"
 
     def form_valid(self, form):
         form.instance.author = self.request.user
