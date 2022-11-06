@@ -42,9 +42,9 @@ urlpatterns = [
         auth_views.LogoutView.as_view(template_name="users/logout.html"),
         name="user-logout",
     ),
-    path("post/<int:pk>", PostDetailView.as_view(), name="post-detail"),
+    path("post/<int:pk>/", PostDetailView.as_view(), name="post-detail"),
     path("post/add/", PostCreateView.as_view(), name="post-create"),
-    path("post/update/<int:pk>/", PostUpdateView.as_view(), name="post-update"),
+    path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
     # django documented recommended pattern
     # if debug==True then this evaluates
     # TODO: refactor all this for S3, both local and production
