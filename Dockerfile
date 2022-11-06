@@ -8,6 +8,7 @@ RUN apk update && \
     apk upgrade && \
 	  apk add git && \
 	  apk add vim && \ # rm me?
+      # TODO: install off compiled hashes? check-in/test this...
       git clone --depth=1 https://github.com/Dslate88/dotfiles.git
 
 # bypass alpine issue with pillow
@@ -21,6 +22,6 @@ COPY . .
 
 LABEL maintainer="devin"
 
-# alpine requires #!/bin/sh
+# alpine requires #!/bin/sh > #!/bin/bash
 CMD ./run.sh
 
