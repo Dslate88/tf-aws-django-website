@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # git pull origin master
 python3 base/manage.py makemigrations
