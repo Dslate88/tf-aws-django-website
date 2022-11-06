@@ -12,32 +12,35 @@ Quick-start development settings - unsuitable for production
 """
 
 import os
-import configparser
+import environ
 from pathlib import Path
 
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-config = configparser.ConfigParser()
-config.read(BASE_DIR / "config.ini")
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
 ALLOWED_HOSTS = []
-DEBUG = config["LOCAL"]["DEBUG"]
-DEFAULT_AUTO_FIELD = config["LOCAL"]["DEFAULT_AUTO_FIELD"]
-LANGUAGE_CODE = config["LOCAL"]["LANGUAGE_CODE"]
-ROOT_URLCONF = config["LOCAL"]["ROOT_URLCONF"]
-SECRET_KEY = config["LOCAL"]["SECRET_KEY"]
-STATIC_URL = config["LOCAL"]["STATIC_URL"]
-TIME_ZONE = config["LOCAL"]["TIME_ZONE"]
-USE_I18N = config["LOCAL"]["USE_I18N"]
-USE_TZ = config["LOCAL"]["USE_TZ"]
-WSGI_APPLICATION = config["LOCAL"]["WSGI_APPLICATION"]
-LOGIN_REDIRECT_URL = config["LOCAL"]["LOGIN_REDIRECT_URL"]
-CRISPY_TEMPLATE_PACK = config["LOCAL"]["CRISPY_TEMPLATE_PACK"]
-MEDIA_ROOT = os.path.join(BASE_DIR, config["LOCAL"]["MEDIA_ROOT"])
-MEDIA_URL = config["LOCAL"]["MEDIA_URL"]
+DEBUG = env("DEBUG")
+DEFAULT_AUTO_FIELD = env("DEFAULT_AUTO_FIELD")
+LANGUAGE_CODE = env("LANGUAGE_CODE")
+ROOT_URLCONF = env("ROOT_URLCONF")
+SECRET_KEY = env("SECRET_KEY")
+STATIC_URL = env("STATIC_URL")
+TIME_ZONE = env("TIME_ZONE")
+USE_I18N = env("USE_I18N")
+USE_TZ = env("USE_TZ")
+WSGI_APPLICATION = env("WSGI_APPLICATION")
+LOGIN_REDIRECT_URL = env("LOGIN_REDIRECT_URL")
+CRISPY_TEMPLATE_PACK = env("CRISPY_TEMPLATE_PACK")
+MEDIA_ROOT = os.path.join(BASE_DIR, env("MEDIA_ROOT"))
+MEDIA_URL = env("MEDIA_URL")
 
 
 INSTALLED_APPS = [
