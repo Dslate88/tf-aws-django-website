@@ -38,3 +38,9 @@ class PostUpdateView(generic.UpdateView):
     model = Post
     fields = ["title", "body"]
     template_name = "blog/post_form.html"
+
+
+class PostDeleteView(generic.DeleteView):
+    model = Post
+    fields = ["title", "body"]
+    template_name = "blog/post_form.html"
