@@ -15,7 +15,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
 from users import views as v
-from blog.views import PostDetailView, PostCreateView
+from blog.views import PostDetailView, PostCreateView, PostUpdateView
 
 
 urlpatterns = [
@@ -43,7 +43,8 @@ urlpatterns = [
         name="user-logout",
     ),
     path("post/<int:pk>", PostDetailView.as_view(), name="post-detail"),
-    path("post/add", PostCreateView.as_view(), name="post-create"),
+    path("post/add/", PostCreateView.as_view(), name="post-create"),
+    path("post/update/", PostUpdateView.as_view(), name="post-update"),
     # django documented recommended pattern
     # if debug==True then this evaluates
     # TODO: refactor all this for S3, both local and production
