@@ -20,8 +20,6 @@ RUN apk del .tmp
 
 COPY . .
 
-LABEL maintainer="devin"
-
 # alpine requires #!/bin/sh > #!/bin/bash
 CMD ./run.sh
 
