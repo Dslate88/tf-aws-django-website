@@ -44,7 +44,7 @@ urlpatterns = [
     ),
     path("post/<int:pk>", PostDetailView.as_view(), name="post-detail"),
     path("post/add/", PostCreateView.as_view(), name="post-create"),
-    path("post/update/", PostUpdateView.as_view(), name="post-update"),
+    path("post/update/<int:pk>/", PostUpdateView.as_view(), name="post-update"),
     # django documented recommended pattern
     # if debug==True then this evaluates
     # TODO: refactor all this for S3, both local and production
