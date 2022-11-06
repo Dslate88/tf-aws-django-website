@@ -10,7 +10,7 @@
                 <div class="card-header">{{ post.title }}</div>
               <div class="card-body">
                 <p class="card-text">{{ post.body }}</p>
-                <a href="#" class="card-link">Read More</a>
+                <a href="{% url "post-detail" post.pk %}">Read More</a>
               </div>
             </div>
         </div>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1> {{ post.title }}</h1>
+
+    <small>
+        By: {{post.author }} - {{post.date_posted}}
+    </small>
+
+    <hr><br/>
+
+    {{ post.body }}
+
+    <br/><br/>
+
+    <button type="button" class="btn btn-outline-secondary">
+        <a href="{% url "blog-home" %}">Back</a>
+    </button>
+
+
+{% endblock %}
+

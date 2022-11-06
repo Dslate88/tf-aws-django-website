@@ -1,4 +1,6 @@
 from django.views import generic
+from django.urls import reverse_lazy
+
 from .models import Post
 
 
@@ -17,3 +19,30 @@ class AboutView(generic.ListView):
 
     def get_queryset(self):  # replace with static? or Author data_model...?
         return Post.objects.order_by("-date_posted")[:5]
+
+
+class PostDetailView(generic.DetailView):
+    model = Post
+    template_name = "blog/post_detail.html"
+
+
+class PostCreateView(generic.CreateView):
+    model = Post
+    fields = ["title", "body"]
+    template_name = "blog/post_form.html"
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class PostUpdateView(generic.UpdateView):
+    model = Post
+    fields = ["title", "body"]
+    template_name = "blog/post_form.html"
+
+
+class PostDeleteView(generic.DeleteView):
+    model = Post
+    template_name = "blog/post_delete.html"
+    success_url = reverse_lazy("blog-home")
