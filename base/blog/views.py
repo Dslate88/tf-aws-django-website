@@ -42,5 +42,5 @@ class PostUpdateView(generic.UpdateView):
 
 class PostDeleteView(generic.DeleteView):
     model = Post
-    fields = ["title", "body"]
-    template_name = "blog/post_form.html"
+    template_name = "blog/post_delete.html"
+    success_url = "blog-home"
