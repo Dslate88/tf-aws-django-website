@@ -4,7 +4,7 @@ services:
   webapp:
     build: .
     env_file:
-      - base/.env
+      - base/.env.webapp
     ports:
       - 8000:8000
     command: python base/manage.py runserver 0.0.0.0:8000
