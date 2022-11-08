@@ -1,9 +1,10 @@
 version: "3.3"
 
 services:
-  devin-django:
-    build: "."
+  webapp:
+    build: ./base
     env_file:
-      - "base/.env"
+      - base/.env.webapp
     ports:
-      - "8000:8000"
+      - 8000:8000
+    command: python manage.py runserver 0.0.0.0:8000
