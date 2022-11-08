@@ -1,6 +1,6 @@
 # config ignore
-base/.env.webapp
-base/.env.webapp.prod
+**.env.webapp
+**.env.webapp.prod
 
 # mac ds_store
 **.DS_STORE**
