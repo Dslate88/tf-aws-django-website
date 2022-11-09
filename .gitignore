@@ -1,6 +1,7 @@
 # terraform
 .terraform.lock**
 .terraform**
+tf/auth.sh
 
 # config ignore
 **.env.webapp
