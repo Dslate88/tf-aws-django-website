@@ -1,3 +1,7 @@
+# terraform
+.terraform.lock**
+.terraform**
+
 # config ignore
 **.env.webapp
 **.env.webapp.prod
