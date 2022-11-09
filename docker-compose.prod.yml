@@ -2,9 +2,9 @@ version: "3.3"
 
 services:
   webapp:
-    build: ./base
+    build: ./django
     env_file:
-      - base/.env.webapp.prod
+      - django/.env.webapp.prod
     expose:
       - 8000
     command: gunicorn base.wsgi:application --bind 0.0.0.0:8000
