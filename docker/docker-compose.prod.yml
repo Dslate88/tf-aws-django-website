@@ -3,7 +3,7 @@ version: "3.3"
 services:
   webapp:
     build: ../django
-    image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django-ec2:latest
+    image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_webapp:latest
     env_file:
       - ../django/.env.webapp.prod
     expose:
