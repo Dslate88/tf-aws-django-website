@@ -1,11 +1,27 @@
+#################################################
 # terraform
+#################################################
+
 .terraform.lock**
 .terraform**
 tf/auth.sh
 
-# config ignore
-**.env.webapp
-**.env.webapp.prod
+#################################################
+# docker
+#################################################
+
+# local/prod compose variables
+docker/.env
+
+# compose local
+django/.env.webapp
+
+# compose prod
+django/.env.webapp.prod
+
+#################################################
+# generated
+#################################################
 
 # mac ds_store
 **.DS_STORE**
