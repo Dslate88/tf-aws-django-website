@@ -2,14 +2,14 @@ version: "3.3"
 
 services:
   webapp:
-    build: ./django
+    build: ../django
     env_file:
-      - django/.env.webapp.prod
+      - ../django/.env.webapp.prod
     expose:
       - 8000
     command: gunicorn base.wsgi:application --bind 0.0.0.0:8000
   nginx:
-    build: ./nginx
+    build: ../nginx
     ports:
       - 9080:80
     depends_on:
