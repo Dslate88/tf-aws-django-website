@@ -1,7 +1,7 @@
 version: "3.3"
 
 services:
-  webapp:
+  django:
     build: ../django
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_webapp:latest
     env_file:
@@ -15,4 +15,4 @@ services:
     ports:
       - 9080:80
     depends_on:
-      - webapp
+      - django

@@ -1,7 +1,7 @@
 version: "3.3"
 
 services:
-  webapp:
+  django:
     build: ../django
     env_file:
       - ../django/.env.webapp
