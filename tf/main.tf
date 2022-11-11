@@ -80,8 +80,8 @@ resource "aws_ecr_lifecycle_policy" "webapp" {
 
 
 resource "aws_ecs_cluster" "main" {
-  name               = "${local.stack_name}-cluster"
-  capacity_providers = ["FARGATE"]
+  name               = "${local.stack_name}-cluster-${local.env}"
+  capacity_providers = ["FARGATE", "FARGATE_SPOT"]
 }
 
 resource "aws_ecs_cluster_capacity_providers" "example" {
