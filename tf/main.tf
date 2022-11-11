@@ -1,5 +1,5 @@
 locals {
-  stack_name = "tf_aws_django_website"
+  stack_name = "django_website"
   env        = "dev"
 
   # vpc
