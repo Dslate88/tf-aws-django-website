@@ -80,13 +80,12 @@ resource "aws_ecr_lifecycle_policy" "webapp" {
 
 
 resource "aws_ecs_cluster" "main" {
-  name               = "${local.stack_name}-cluster-${local.env}"
-  capacity_providers = ["FARGATE", "FARGATE_SPOT"]
+  name = "${local.stack_name}-cluster-${local.env}"
 }
 
 resource "aws_ecs_cluster_capacity_providers" "example" {
   cluster_name       = aws_ecs_cluster.main.name
-  capacity_providers = ["FARGATE"]
+  capacity_providers = ["FARGATE", "FARGATE_SPOT"]
 
   # TODO: use spot instances here??
   default_capacity_provider_strategy {
