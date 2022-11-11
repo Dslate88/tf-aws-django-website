@@ -19,6 +19,10 @@ locals {
   priv_cidrs       = ["10.0.1.0/24", "10.0.3.0/24"]
   priv_avail_zones = ["us-east-1a", "us-east-1b"]
   priv_nat_gateway = false # for now
+
+  # ecr
+  ecr_containers = ["django_nginx", "django_webapp"]
+
 }
 
 
@@ -44,9 +48,12 @@ module "vpc" {
   priv_nat_gateway = local.priv_nat_gateway
 }
 
+
+
 # 1 repo for each compose container
-resource "aws_ecr_repository" "webapp" {
-  name                 = "django_webapp"
+resource "aws_ecr_repository" "containers" {
+  for_each             = toset(local.ecr_containers)
+  name                 = each.value
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
@@ -54,14 +61,6 @@ resource "aws_ecr_repository" "webapp" {
   }
 }
 
-resource "aws_ecr_repository" "nginx" {
-  name                 = "django_nginx"
-  image_tag_mutability = "MUTABLE"
-
-  image_scanning_configuration {
-    scan_on_push = false
-  }
-}
 
 resource "aws_ecs_cluster" "main" {
   name               = "${local.stack_name}-cluster"
