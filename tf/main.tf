@@ -117,10 +117,11 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
-resource "aws_ecs_task_definition" "webapp" {
+resource "aws_ecs_task_definition" "main" {
+  # TODO: add task_role_arn with needed perms...
   family                   = "test_task"
   requires_compatibilities = ["FARGATE"]
-  execution_role_arn       = aws_iam_role.task.arn
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   network_mode             = "awsvpc"
   cpu                      = 256
   memory                   = 512
