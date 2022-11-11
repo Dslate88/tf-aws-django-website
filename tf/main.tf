@@ -59,3 +59,19 @@ resource "aws_ecr_repository" "nginx" {
     scan_on_push = false
   }
 }
+
+resource "aws_ecs_cluster" "main" {
+  name = "${local.stack_name}-cluster"
+}
+
+resource "aws_ecs_cluster_capacity_providers" "example" {
+  cluster_name       = aws_ecs_cluster.main.name
+  capacity_providers = ["FARGATE"]
+
+  # TODO: use spot instances here??
+  default_capacity_provider_strategy {
+    base              = 1
+    weight            = 100
+    capacity_provider = "FARGATE"
+  }
+}
