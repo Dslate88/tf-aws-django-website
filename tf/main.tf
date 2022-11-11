@@ -22,7 +22,6 @@ locals {
 
   # ecr
   ecr_containers = ["django_nginx", "django_webapp"]
-
 }
 
 
@@ -48,9 +47,6 @@ module "vpc" {
   priv_nat_gateway = local.priv_nat_gateway
 }
 
-
-
-# 1 repo for each compose container
 resource "aws_ecr_repository" "containers" {
   for_each             = toset(local.ecr_containers)
   name                 = each.value
@@ -59,6 +55,27 @@ resource "aws_ecr_repository" "containers" {
   image_scanning_configuration {
     scan_on_push = false
   }
+}
+
+# ecr lifecycle policy for each ecr_containers
+resource "aws_ecr_lifecycle_policy" "webapp" {
+  for_each   = aws_ecr_repository.containers
+  repository = each.value.name
+
+  policy = jsonencode({
+    rules = [{
+      rulePriority = 1
+      description  = "keep last 10 images"
+      action = {
+        type = "expire"
+      }
+      selection = {
+        tagStatus   = "any"
+        countType   = "imageCountMoreThan"
+        countNumber = 10
+      }
+    }]
+  })
 }
 
 
