@@ -96,7 +96,7 @@ resource "aws_ecs_cluster_capacity_providers" "example" {
 }
 
 resource "aws_iam_role" "task" {
-  name = "${local.stack_name}-ecs-task-execution-role"
+  name = "${local.stack_name}-ecs-task-execution-role-${local.env}"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
