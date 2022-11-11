@@ -146,8 +146,9 @@ resource "aws_ecs_service" "webapp" {
     type = "ECS"
   }
 
+  # TODO: add security_groups
   network_configuration {
     subnets          = module.vpc.pub_subnets
-    assign_public_ip = true
+    assign_public_ip = false
   }
 }
