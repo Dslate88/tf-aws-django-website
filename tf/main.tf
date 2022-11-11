@@ -1,11 +1,11 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  stack_name = "django_website"
+  stack_name = "django-website"
   env        = "dev"
 
   # vpc
-  vpc_name             = "website"
+  vpc_name             = "${local.env}-website"
   vpc_cidr             = "10.0.0.0/16"
   enable_dns_hostnames = true
   enable_igw           = true
@@ -64,7 +64,8 @@ resource "aws_ecr_repository" "nginx" {
 }
 
 resource "aws_ecs_cluster" "main" {
-  name = "${local.stack_name}-cluster"
+  name               = "${local.stack_name}-cluster"
+  capacity_providers = ["FARGATE"]
 }
 
 resource "aws_ecs_cluster_capacity_providers" "example" {
@@ -108,6 +109,7 @@ resource "aws_ecs_task_definition" "webapp" {
   network_mode             = "awsvpc"
   cpu                      = 256
   memory                   = 512
+  # TODO: dynamnic generate containers...
   container_definitions = jsonencode([
     {
       name  = "test_nginx"
