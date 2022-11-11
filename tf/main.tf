@@ -1,3 +1,6 @@
+data "aws_caller_identity" "current" {}
+
+
 locals {
   stack_name = "django_website"
   env        = "dev"
@@ -18,6 +21,7 @@ locals {
   priv_avail_zones = ["us-east-1a", "us-east-1b"]
   priv_nat_gateway = false # for now
 }
+
 
 module "vpc" {
   source     = "git@github.com:Dslate88/tf-aws-vpc"
@@ -73,5 +77,33 @@ resource "aws_ecs_cluster_capacity_providers" "example" {
     base              = 1
     weight            = 100
     capacity_provider = "FARGATE"
+  }
+}
+
+resource "aws_ecs_task_definition" "webapp" {
+  family                   = "test_task"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = 256
+  memory                   = 512
+  container_definitions = jsonencode([
+    {
+      name  = "test_nginx"
+      image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/django_nginx"
+      portMappings = [
+        {
+          containerPort = 80
+          hostPort      = 80
+          protocol      = "tcp"
+        }
+      ]
+      essential = true
+    }
+    ]
+  )
+
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "ARM64"
   }
 }
