@@ -131,3 +131,23 @@ resource "aws_ecs_task_definition" "webapp" {
     cpu_architecture        = "ARM64"
   }
 }
+
+resource "aws_ecs_service" "webapp" {
+  name                               = "webapp"
+  cluster                            = aws_ecs_cluster.main.id
+  task_definition                    = aws_ecs_task_definition.webapp.arn
+  launch_type                        = "FARGATE"
+  desired_count                      = 1
+  wait_for_steady_state              = true
+  deployment_maximum_percent         = 200
+  deployment_minimum_healthy_percent = 100
+
+  deployment_controller {
+    type = "ECS"
+  }
+
+  network_configuration {
+    subnets          = module.vpc.pub_subnets
+    assign_public_ip = true
+  }
+}
