@@ -148,21 +148,23 @@ resource "aws_ecs_task_definition" "main" {
   }
 }
 
-resource "aws_ecs_service" "webapp" {
-  name                               = "webapp"
+resource "aws_ecs_service" "main" {
+  name                               = "${local.stack_name}-service-${local.env}"
   cluster                            = aws_ecs_cluster.main.id
-  task_definition                    = aws_ecs_task_definition.webapp.arn
+  task_definition                    = aws_ecs_task_definition.main.arn
   launch_type                        = "FARGATE"
   desired_count                      = 1
   wait_for_steady_state              = true
-  deployment_maximum_percent         = 200
-  deployment_minimum_healthy_percent = 100
+  deployment_maximum_percent         = 100
+  deployment_minimum_healthy_percent = 0
+  scheduling_strategy                = "REPLICA"
 
   deployment_controller {
     type = "ECS"
   }
 
   # TODO: add security_groups
+  # TODO: convert to priv_subs and use alb
   network_configuration {
     subnets          = module.vpc.pub_subnets
     assign_public_ip = false
