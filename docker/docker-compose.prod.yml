@@ -13,6 +13,6 @@ services:
     build: ../nginx
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_nginx:latest
     ports:
-      - 9080:80
-    depends_on:
-      - django
+      - 80:80
+    # depends_on:
+    #   - django
