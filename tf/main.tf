@@ -80,7 +80,9 @@ resource "aws_ecr_lifecycle_policy" "webapp" {
 
 
 resource "aws_ecs_cluster" "main" {
+  # TODO: add cloudwatch/s3 log storage to configuration, if I need execute_command?
   name = "${local.stack_name}-cluster-${local.env}"
+
   setting {
     name  = "containerInsights"
     value = "enabled"
@@ -123,7 +125,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
 
 resource "aws_ecs_task_definition" "main" {
   # TODO: add task_role_arn with needed perms...
-  family                   = "test_task"
+  family                   = "${local.stack_name}-${local.env}"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   network_mode             = "awsvpc"
@@ -132,15 +134,19 @@ resource "aws_ecs_task_definition" "main" {
   # TODO: dynamnic generate containers...
   container_definitions = jsonencode([
     {
-      name  = "test_nginx"
-      image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/django_nginx"
+      name      = "nginx"
+      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/django_nginx"
+      essential = true
       portMappings = [
         {
           containerPort = 80
-          hostPort      = 80
           protocol      = "tcp"
         }
       ]
+    },
+    {
+      name      = "django"
+      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/django_webapp"
       essential = true
     }
     ]
