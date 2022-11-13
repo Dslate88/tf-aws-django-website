@@ -6,13 +6,9 @@ services:
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_webapp:latest
     env_file:
       - ../django/.env.webapp.prod
-    expose:
-      - 8000
     command: gunicorn base.wsgi:application --bind 0.0.0.0:8000
   nginx:
-    build: ../nginx
+    build: ../nginx/prod
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_nginx:latest
     ports:
       - 80:80
-    # depends_on:
-    #   - django

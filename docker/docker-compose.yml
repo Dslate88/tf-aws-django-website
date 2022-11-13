@@ -5,6 +5,8 @@ services:
     build: ../django
     env_file:
       - ../django/.env.webapp
-    ports:
-      - 8000:8000
     command: python manage.py runserver 0.0.0.0:8000
+  nginx:
+    build: ../nginx/local
+    ports:
+      - 80:80
