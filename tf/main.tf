@@ -94,55 +94,66 @@ resource "aws_security_group" "ecs_tasks" {
   vpc_id = module.vpc.vpc_id
 
   ingress {
-    protocol    = "tcp"
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+    self        = false
   }
 
   ingress {
-    # self        = true
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    self        = false
+  }
+
+  ingress {
     protocol    = "tcp"
     from_port   = 8000
     to_port     = 8000
     cidr_blocks = ["0.0.0.0/0"]
+    self        = false
   }
 
   egress {
-    protocol    = "-1"
     from_port   = 0
     to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-resource "aws_security_group" "alb" {
-  name   = "${local.stack_name}-sg-alb-${local.env}"
-  vpc_id = module.vpc.vpc_id
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
     protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
+    self        = false
   }
+
 }
 
-
+# resource "aws_security_group" "alb" {
+#   name   = "${local.stack_name}-sg-alb-${local.env}"
+#   vpc_id = module.vpc.vpc_id
+#
+#   ingress {
+#     protocol    = "tcp"
+#     from_port   = 80
+#     to_port     = 80
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+#
+#   ingress {
+#     protocol    = "tcp"
+#     from_port   = 443
+#     to_port     = 443
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+#
+#   egress {
+#     protocol    = "-1"
+#     from_port   = 0
+#     to_port     = 0
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
+# }
+#
+#
 resource "aws_ecs_cluster" "main" {
   # TODO: add cloudwatch/s3 log storage to configuration, if I need execute_command?
   name = "${local.stack_name}-cluster-${local.env}"
@@ -166,42 +177,41 @@ resource "aws_ecs_cluster_capacity_providers" "example" {
 }
 
 
-# create log group for nginx container
 resource "aws_cloudwatch_log_group" "nginx_container" {
   name              = "/ecs/${local.stack_name}/container-nginx-${local.env}"
   retention_in_days = 14
 }
 
-# create log group for webapp container
 resource "aws_cloudwatch_log_group" "django_container" {
   name              = "/ecs/${local.stack_name}/container-django-${local.env}"
   retention_in_days = 14
 }
 
-
 resource "aws_ecs_task_definition" "main" {
   # TODO: add task_role_arn with needed perms...
-  # family                   = "${local.stack_name}-${local.env}"
-  family                   = "test_annoyed_9821"
+  family                   = "${local.stack_name}-${local.env}-2"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  task_role_arn            = aws_iam_role.ecs_task_role.arn
-  network_mode             = "awsvpc"
-  cpu                      = 512
-  memory                   = 1024
+  # task_role_arn            = aws_iam_role.ecs_task_role.arn
+  network_mode = "awsvpc"
+  cpu          = 256
+  memory       = 512
   # TODO: dynamnic generate containers...
   container_definitions = jsonencode([
     {
       name      = "nginx"
       image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/django_nginx"
       essential = true
-      cpu       = 256
-      memory    = 512
       portMappings = [
         {
           containerPort = 80
           protocol      = "tcp"
         }
+      ]
+      command = [
+        "nginx",
+        "-g",
+        "daemon off;"
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -216,14 +226,19 @@ resource "aws_ecs_task_definition" "main" {
       name      = "django"
       image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.us-east-1.amazonaws.com/django_webapp"
       essential = true
-      cpu       = 256
-      memory    = 512
-      # portMappings = [
-      #   {
-      #     containerPort = 8000
-      #     protocol      = "tcp"
-      #   }
-      # ]
+      portMappings = [
+        {
+          containerPort = 8000
+          protocol      = "tcp"
+        }
+      ]
+      # create command to run gunicorn server
+      command = [
+        "gunicorn",
+        "base.wsgi:application",
+        "--bind",
+        "localhost:8000",
+      ]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -240,18 +255,24 @@ resource "aws_ecs_task_definition" "main" {
     operating_system_family = "LINUX"
     cpu_architecture        = "ARM64"
   }
-
 }
+
 
 resource "aws_ecs_service" "main" {
   name                               = "${local.stack_name}-service-${local.env}"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.main.arn
   launch_type                        = "FARGATE"
-  desired_count                      = 0
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 100
+  wait_for_steady_state              = true
+
+  deployment_circuit_breaker {
+    enable   = false
+    rollback = false
+  }
 
   deployment_controller {
     type = "ECS"
@@ -265,14 +286,14 @@ resource "aws_ecs_service" "main" {
 
   # TODO: convert to priv_subs and use alb
   network_configuration {
-    # subnets          = module.vpc.priv_subnets
-    # assign_public_ip = false
     subnets          = module.vpc.pub_subnets
     assign_public_ip = true
-    security_groups  = [aws_security_group.ecs_tasks.id, aws_security_group.alb.id]
+    security_groups  = [aws_security_group.ecs_tasks.id]
+    # security_groups  = [aws_security_group.ecs_tasks.id, aws_security_group.alb.id]
   }
 
-  lifecycle {
-    ignore_changes = [desired_count, task_definition]
-  }
+  # lifecycle {
+  #   ignore_changes = [task_definition]
+  #   # ignore_changes = [desired_count, task_definition]
+  # }
 }
