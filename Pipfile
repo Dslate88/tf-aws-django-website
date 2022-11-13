@@ -9,6 +9,7 @@ django-crispy-forms = "*"
 pillow = "*"
 django-environ = "*"
 gunicorn = "*"
+requests = "*"
 
 [dev-packages]
 mypy = "*"
