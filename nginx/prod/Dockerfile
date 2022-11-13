@@ -1,7 +1,6 @@
-FROM nginx:1.21-alpine
+FROM nginx
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-CMD ["nginx", "-g", "daemon off;"]
-# CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80
 
