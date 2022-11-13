@@ -13,6 +13,7 @@ Quick-start development settings - unsuitable for production
 
 import os
 import environ
+import requests
 from pathlib import Path
 
 
@@ -41,6 +42,14 @@ LOGIN_REDIRECT_URL = env("LOGIN_REDIRECT_URL")
 CRISPY_TEMPLATE_PACK = env("CRISPY_TEMPLATE_PACK")
 MEDIA_ROOT = os.path.join(BASE_DIR, env("MEDIA_ROOT"))
 MEDIA_URL = env("MEDIA_URL")
+
+
+# ECS Fargate: Get the container's IP address for ALLOWED_HOSTS
+if "ECS_CONTAINER_METADATA_URI_V4" in os.environ:
+    METADATA_URI = os.environ["ECS_CONTAINER_METADATA_URI_V4"]
+    response = requests.get(METADATA_URI)
+    metadata = response.json()
+    ALLOWED_HOSTS.append[metadata["Networks"][0]["IPv4Addresses"][0]]
 
 
 INSTALLED_APPS = [
