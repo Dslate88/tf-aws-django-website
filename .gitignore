@@ -4,11 +4,13 @@
 
 .terraform.lock**
 .terraform**
-tf/auth.sh
 
 #################################################
-# docker
+# env config
 #################################################
+
+# root .env
+.env
 
 # local/prod compose variables
 docker/.env
@@ -18,6 +20,9 @@ django/.env.webapp
 
 # compose prod
 django/.env.webapp.prod
+
+# django media
+django/media
 
 #################################################
 # generated
