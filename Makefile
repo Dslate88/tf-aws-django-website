@@ -28,10 +28,10 @@ auth:
 	aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
 
 apply:
-	terraform apply
+	cd tf && terraform apply
 
 plan:
-	terraform plan
+	cd tf && terraform plan
 
 destroy:
-	terraform destroy
+	cd tf && terraform destroy
