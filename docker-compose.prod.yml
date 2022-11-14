@@ -2,25 +2,10 @@ version: "3.0"
 
 services:
   django:
-    build: ./django
     env_file: ./django/.env.webapp.prod
     command: gunicorn base.wsgi:application --bind 0.0.0.0:8000
-    expose:
-      - 8000
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_webapp:latest
-    networks:
-      - django-network
 
   nginx:
     build: ./nginx/prod
-    restart: always
-    ports:
-      - 80:80
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_nginx:latest
-    depends_on:
-      - django
-    networks:
-      - django-network
-
-networks:
-  django-network:
