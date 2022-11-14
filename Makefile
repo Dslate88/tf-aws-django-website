@@ -7,22 +7,22 @@ help:
 	make -pRrq  -f $(THIS_FILE) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 
 build:
-	docker-compose -f docker-compose.prod.yml build $(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build $(c)
 
 up:
-	docker-compose -f docker-compose.prod.yml up -d $(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d $(c)
 
 push:
-	docker-compose -f docker-compose.prod.yml push $(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml push $(c)
 
 down:
-	docker-compose -f docker-compose.prod.yml down $(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml down $(c)
 
 logs:
-	docker-compose -f docker-compose.prod.yml logs -f $(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs -f $(c)
 
 ps:
-	docker-compose -f docker-compose.prod.yml ps $(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml ps $(c)
 
 auth:
 	aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
