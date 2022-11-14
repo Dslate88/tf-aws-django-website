@@ -270,7 +270,7 @@ resource "aws_ecs_service" "main" {
   wait_for_steady_state              = true
 
   deployment_circuit_breaker {
-    enable   = false
+    enable   = true
     rollback = false
   }
 
