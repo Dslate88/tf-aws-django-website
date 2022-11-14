@@ -1,3 +1,5 @@
+include .env
+
 THIS_FILE := $(lastword $(MAKEFILE_LIST))
 .PHONY: help build up start down destroy stop restart logs logs-api ps login-timescale login-api db-shell
 
@@ -21,3 +23,6 @@ logs:
 
 ps:
 	docker-compose -f docker-compose.prod.yml ps $(c)
+
+auth:
+	aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
