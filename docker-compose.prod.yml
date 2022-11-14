@@ -2,8 +2,8 @@ version: "3.0"
 
 services:
   django:
-    build: ../django
-    env_file: ../django/.env.webapp.prod
+    build: ./django
+    env_file: ./django/.env.webapp.prod
     command: gunicorn base.wsgi:application --bind 0.0.0.0:8000
     expose:
       - 8000
@@ -12,7 +12,7 @@ services:
       - django-network
 
   nginx:
-    build: ../nginx/prod
+    build: ./nginx/prod
     restart: always
     ports:
       - 80:80
