@@ -269,6 +269,26 @@ resource "aws_ecs_service" "main" {
   # }
 }
 
+# get data aws route 53 zone
+data "aws_route53_zone" "main" {
+  name         = "devinslate.com"
+  private_zone = false
+}
+
+# create alias record for the load balancer
+resource "aws_route53_record" "main" {
+  zone_id = data.aws_route53_zone.main.id
+  name    = "devinslate.com"
+  type    = "A"
+  alias {
+    name                   = aws_lb.main.dns_name
+    zone_id                = aws_lb.main.zone_id
+    evaluate_target_health = false
+  }
+}
+
+
+
 # create target group for ecs fargate
 resource "aws_lb_target_group" "main" {
   name        = "${local.stack_name}-tg-${local.env}"
