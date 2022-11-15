@@ -161,7 +161,7 @@ resource "aws_cloudwatch_log_group" "django_container" {
 
 resource "aws_ecs_task_definition" "main" {
   # TODO: add task_role_arn with needed perms...
-  family                   = "${local.stack_name}-${local.env}-3"
+  family                   = "${local.stack_name}-${local.env}-4"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   # task_role_arn            = aws_iam_role.ecs_task_role.arn
@@ -257,8 +257,8 @@ resource "aws_ecs_service" "main" {
 
   # TODO: convert to priv_subs and use alb
   network_configuration {
-    subnets          = module.vpc.pub_subnets
-    assign_public_ip = true
+    subnets          = module.vpc.private_subnets
+    assign_public_ip = false
     security_groups  = [aws_security_group.ecs_tasks.id]
     # security_groups  = [aws_security_group.ecs_tasks.id, aws_security_group.alb.id]
   }
