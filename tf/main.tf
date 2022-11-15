@@ -287,8 +287,6 @@ resource "aws_route53_record" "main" {
   }
 }
 
-
-
 # create target group for ecs fargate
 resource "aws_lb_target_group" "main" {
   name        = "${local.stack_name}-tg-${local.env}"
@@ -341,29 +339,3 @@ resource "aws_lb_listener" "main" {
 #     values = ["/"]
 #   }
 # }
-
-resource "aws_security_group" "alb" {
-  name   = "${local.stack_name}-sg-alb-${local.env}"
-  vpc_id = module.vpc.vpc_id
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    protocol    = "-1"
-    from_port   = 0
-    to_port     = 0
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
