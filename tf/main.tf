@@ -11,16 +11,16 @@ locals {
   enable_dns_hostnames = true
   enable_igw           = true
 
-  # pub_cidrs       = ["10.0.0.0/24", "10.0.2.0/24"]
-  # pub_avail_zones = ["us-east-1a", "us-east-1b"]
-  pub_cidrs       = ["10.0.0.0/24"]
-  pub_avail_zones = ["us-east-1a"]
-  pub_map_ip      = true
+  pub_cidrs       = ["10.0.0.0/24", "10.0.2.0/24"]
+  pub_avail_zones = ["us-east-1a", "us-east-1b"]
+  # pub_cidrs       = ["10.0.0.0/24"]
+  # pub_avail_zones = ["us-east-1a"]
+  pub_map_ip = true
 
-  priv_cidrs       = ["10.0.1.0/24"]
-  priv_avail_zones = ["us-east-1a"]
-  # priv_cidrs       = ["10.0.1.0/24", "10.0.3.0/24"]
-  # priv_avail_zones = ["us-east-1a", "us-east-1b"]
+  # priv_cidrs       = ["10.0.1.0/24"]
+  # priv_avail_zones = ["us-east-1a"]
+  priv_cidrs       = ["10.0.1.0/24", "10.0.3.0/24"]
+  priv_avail_zones = ["us-east-1a", "us-east-1b"]
   priv_nat_gateway = true
 
   enable_s3_endpoint      = false
@@ -127,33 +127,6 @@ resource "aws_security_group" "ecs_tasks" {
 
 }
 
-# resource "aws_security_group" "alb" {
-#   name   = "${local.stack_name}-sg-alb-${local.env}"
-#   vpc_id = module.vpc.vpc_id
-#
-#   ingress {
-#     protocol    = "tcp"
-#     from_port   = 80
-#     to_port     = 80
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-#
-#   ingress {
-#     protocol    = "tcp"
-#     from_port   = 443
-#     to_port     = 443
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-#
-#   egress {
-#     protocol    = "-1"
-#     from_port   = 0
-#     to_port     = 0
-#     cidr_blocks = ["0.0.0.0/0"]
-#   }
-# }
-#
-#
 resource "aws_ecs_cluster" "main" {
   # TODO: add cloudwatch/s3 log storage to configuration, if I need execute_command?
   name = "${local.stack_name}-cluster-${local.env}"
@@ -176,7 +149,6 @@ resource "aws_ecs_cluster_capacity_providers" "example" {
   }
 }
 
-
 resource "aws_cloudwatch_log_group" "nginx_container" {
   name              = "/ecs/${local.stack_name}/container-nginx-${local.env}"
   retention_in_days = 14
@@ -189,7 +161,7 @@ resource "aws_cloudwatch_log_group" "django_container" {
 
 resource "aws_ecs_task_definition" "main" {
   # TODO: add task_role_arn with needed perms...
-  family                   = "${local.stack_name}-${local.env}-2"
+  family                   = "${local.stack_name}-${local.env}-3"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   # task_role_arn            = aws_iam_role.ecs_task_role.arn
@@ -232,7 +204,6 @@ resource "aws_ecs_task_definition" "main" {
           protocol      = "tcp"
         }
       ]
-      # create command to run gunicorn server
       command = [
         "gunicorn",
         "base.wsgi:application",
@@ -278,11 +249,11 @@ resource "aws_ecs_service" "main" {
     type = "ECS"
   }
 
-  # load_balancer {
-  #   target_group_arn = aws_lb_target_group.main.arn
-  #   container_name   = "nginx"
-  #   container_port   = 80
-  # }
+  load_balancer {
+    target_group_arn = aws_lb_target_group.main.arn
+    container_name   = "nginx"
+    container_port   = 80
+  }
 
   # TODO: convert to priv_subs and use alb
   network_configuration {
@@ -296,4 +267,83 @@ resource "aws_ecs_service" "main" {
   #   ignore_changes = [task_definition]
   #   # ignore_changes = [desired_count, task_definition]
   # }
+}
+
+# create target group for ecs fargate
+resource "aws_lb_target_group" "main" {
+  name        = "${local.stack_name}-tg-${local.env}"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = module.vpc.vpc_id
+  target_type = "ip"
+  # health_check {
+  #   path                = "/"
+  #   interval            = 30
+  #   timeout             = 5
+  #   healthy_threshold   = 2
+  #   unhealthy_threshold = 2
+  # }
+}
+
+# create elastic load balancer
+resource "aws_lb" "main" {
+  name               = "${local.stack_name}-lb-${local.env}"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb.id]
+  subnets            = module.vpc.pub_subnets
+}
+
+# create listener
+resource "aws_lb_listener" "main" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.main.arn
+  }
+}
+
+# create listener rule
+# resource "aws_lb_listener_rule" "main" {
+#   listener_arn = aws_lb_listener.main.arn
+#   priority     = 1
+#
+#   action {
+#     type             = "forward"
+#     target_group_arn = aws_lb_target_group.main.arn
+#   }
+#
+#   condition {
+#     field  = "path-pattern"
+#     values = ["/"]
+#   }
+# }
+
+resource "aws_security_group" "alb" {
+  name   = "${local.stack_name}-sg-alb-${local.env}"
+  vpc_id = module.vpc.vpc_id
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    protocol    = "-1"
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
