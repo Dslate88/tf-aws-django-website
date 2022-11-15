@@ -257,7 +257,7 @@ resource "aws_ecs_service" "main" {
 
   # TODO: convert to priv_subs and use alb
   network_configuration {
-    subnets          = module.vpc.private_subnets
+    subnets          = module.vpc.priv_subnets
     assign_public_ip = false
     security_groups  = [aws_security_group.ecs_tasks.id]
     # security_groups  = [aws_security_group.ecs_tasks.id, aws_security_group.alb.id]
@@ -308,7 +308,7 @@ resource "aws_lb" "main" {
   name               = "${local.stack_name}-lb-${local.env}"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb.id]
+  security_groups    = [aws_security_group.ecs_tasks.id]
   subnets            = module.vpc.pub_subnets
 }
 
