@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecs_task_role" {
-  name = "${local.stack_name}-task-role-${local.env}"
+  name = "${var.stack_name}-task-role-${var.env}"
 
   assume_role_policy = <<EOF
 {
@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_iam_policy" "dynamodb" {
-  name        = "${local.stack_name}-task-policy-${local.env}"
+  name        = "${var.stack_name}-task-policy-${var.env}"
   description = "Policy that allows access to DynamoDB"
 
   policy = <<EOF
@@ -55,7 +55,7 @@ resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
 
 
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "${local.stack_name}-ecs-task-execution-role-${local.env}"
+  name = "${var.stack_name}-ecs-task-execution-role-${var.env}"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
