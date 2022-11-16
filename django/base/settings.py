@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, ".env.webapp"))
 
 
-ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(" ")
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "devinslate.com"]
 DEBUG = env("DEBUG")
 DEFAULT_AUTO_FIELD = env("DEFAULT_AUTO_FIELD")
 LANGUAGE_CODE = env("LANGUAGE_CODE")
