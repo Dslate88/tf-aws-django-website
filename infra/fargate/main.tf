@@ -147,6 +147,17 @@ resource "aws_ecs_task_definition" "main" {
           protocol      = "tcp"
         }
       ]
+      environment = [
+        {
+          name = "DEPLOY_ENV", value = "prod"
+        }
+      ]
+      # environmentFiles = [
+      #   {
+      #     value = "s3://my-bucket/ecs-env-files/django.env"
+      #     type  = "s3"
+      #   }
+      # ]
       command = [
         "gunicorn",
         "base.wsgi:application",
