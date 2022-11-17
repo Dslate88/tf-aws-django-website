@@ -12,27 +12,37 @@ Quick-start development settings - unsuitable for production
 """
 
 import os
+import environ
 from pathlib import Path
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# load environment variables from proper .env file
+if os.environ["DEPLOY_ENV"] == "prod":
+    environ.Env.read_env(os.path.join(BASE_DIR, ".env.webapp.prod"))
+else:
+    environ.Env.read_env(os.path.join(BASE_DIR, ".env.webapp"))
 
-ALLOWED_HOSTS = os.environ["ALLOWED_HOSTS"].split(" ")
-DEBUG = os.environ["DEBUG"]
-DEFAULT_AUTO_FIELD = os.environ["DEFAULT_AUTO_FIELD"]
-LANGUAGE_CODE = os.environ["LANGUAGE_CODE"]
-ROOT_URLCONF = os.environ["ROOT_URLCONF"]
-SECRET_KEY = os.environ["SECRET_KEY"]
-STATIC_URL = os.environ["STATIC_URL"]
-TIME_ZONE = os.environ["TIME_ZONE"]
-USE_I18N = os.environ["USE_I18N"]
-USE_TZ = os.environ["USE_TZ"]
-WSGI_APPLICATION = os.environ["WSGI_APPLICATION"]
-LOGIN_REDIRECT_URL = os.environ["LOGIN_REDIRECT_URL"]
-CRISPY_TEMPLATE_PACK = os.environ["CRISPY_TEMPLATE_PACK"]
-MEDIA_ROOT = os.path.join(BASE_DIR, os.environ["MEDIA_ROOT"])
-MEDIA_URL = os.environ["MEDIA_URL"]
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
+ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(" ")
+DEBUG = env("DEBUG")
+DEFAULT_AUTO_FIELD = env("DEFAULT_AUTO_FIELD")
+LANGUAGE_CODE = env("LANGUAGE_CODE")
+ROOT_URLCONF = env("ROOT_URLCONF")
+SECRET_KEY = env("SECRET_KEY")
+STATIC_URL = env("STATIC_URL")
+TIME_ZONE = env("TIME_ZONE")
+USE_I18N = env("USE_I18N")
+USE_TZ = env("USE_TZ")
+WSGI_APPLICATION = env("WSGI_APPLICATION")
+LOGIN_REDIRECT_URL = env("LOGIN_REDIRECT_URL")
+CRISPY_TEMPLATE_PACK = env("CRISPY_TEMPLATE_PACK")
+MEDIA_ROOT = os.path.join(BASE_DIR, env("MEDIA_ROOT"))
+MEDIA_URL = env("MEDIA_URL")
 
 
 INSTALLED_APPS = [
