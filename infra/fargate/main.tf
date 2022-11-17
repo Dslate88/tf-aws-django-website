@@ -171,7 +171,6 @@ resource "aws_ecs_task_definition" "main" {
   }
 }
 
-
 resource "aws_ecs_service" "main" {
   count                              = var.deploy_ecs_service ? 1 : 0
   name                               = "${var.stack_name}-service-${var.env}"
@@ -211,19 +210,42 @@ resource "aws_ecs_service" "main" {
   # }
 }
 
-data "aws_route53_zone" "main" {
-  name         = "devinslate.com"
-  private_zone = false
-}
-
-# create alias record for the load balancer
+# # create alias record for the load balancer
 resource "aws_route53_record" "main" {
-  zone_id = data.aws_route53_zone.main.id
-  name    = "devinslate.com"
-  type    = "A"
+  zone_id         = data.aws_route53_zone.main.id
+  name            = "devinslate.com"
+  allow_overwrite = true
+  type            = "A"
   alias {
     name                   = aws_lb.main.dns_name
     zone_id                = aws_lb.main.zone_id
     evaluate_target_health = false
   }
+}
+
+resource "aws_acm_certificate" "cert" {
+  domain_name       = "devinslate.com"
+  validation_method = "DNS"
+}
+
+data "aws_route53_zone" "main" {
+  name         = "devinslate.com"
+  private_zone = false
+}
+
+resource "aws_route53_record" "validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = data.aws_route53_zone.main.zone_id
 }
