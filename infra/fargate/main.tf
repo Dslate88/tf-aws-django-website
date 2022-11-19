@@ -212,7 +212,6 @@ resource "aws_ecs_service" "main" {
   # }
 }
 
-# # create alias record for the load balancer
 resource "aws_route53_record" "main" {
   zone_id         = data.aws_route53_zone.main.id
   name            = "devinslate.com"
