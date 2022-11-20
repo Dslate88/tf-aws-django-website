@@ -1,10 +1,9 @@
 resource "aws_lb_target_group" "main" {
   name        = "${var.stack_name}-tg-${var.env}"
   port        = 80
-  protocol    = "HTTP"
+  protocol    = "HTTP" # port misleading, but required
   vpc_id      = var.vpc_id
   target_type = "ip"
-
   health_check {
     path                = "/"
     interval            = 30

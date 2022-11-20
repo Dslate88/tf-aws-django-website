@@ -64,7 +64,6 @@ resource "aws_security_group" "ecs_tasks" {
 
 resource "aws_ecs_cluster" "main" {
   name = "${var.stack_name}-cluster-${var.env}"
-
   setting {
     name  = "containerInsights"
     value = "enabled"
@@ -74,7 +73,6 @@ resource "aws_ecs_cluster" "main" {
 resource "aws_ecs_cluster_capacity_providers" "example" {
   cluster_name       = aws_ecs_cluster.main.name
   capacity_providers = ["FARGATE"]
-
   default_capacity_provider_strategy {
     base              = 1
     weight            = 100
@@ -94,14 +92,13 @@ resource "aws_cloudwatch_log_group" "django_container" {
 
 # TODO: clean this up into a module
 resource "aws_ecs_task_definition" "main" {
-  # TODO: add task_role_arn with needed perms...
   family                   = "${var.stack_name}-${var.env}-4"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  # task_role_arn            = aws_iam_role.ecs_task_role.arn
-  network_mode = "awsvpc"
-  cpu          = 256
-  memory       = 512
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
+  network_mode             = "awsvpc"
+  cpu                      = 256
+  memory                   = 512
   # TODO: dynamnic generate containers...
   container_definitions = jsonencode([
     {

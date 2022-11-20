@@ -18,39 +18,42 @@ resource "aws_iam_role" "ecs_task_role" {
 EOF
 }
 
-resource "aws_iam_policy" "dynamodb" {
-  name        = "${var.stack_name}-task-policy-${var.env}"
-  description = "Policy that allows access to DynamoDB"
-
+resource "aws_iam_policy" "s3_bucket" {
+  name   = "${var.stack_name}-s3-bucket-${var.env}"
   policy = <<EOF
 {
-   "Version": "2012-10-17",
-   "Statement": [
-       {
-           "Effect": "Allow",
-           "Action": [
-               "dynamodb:CreateTable",
-               "dynamodb:UpdateTimeToLive",
-               "dynamodb:PutItem",
-               "dynamodb:DescribeTable",
-               "dynamodb:ListTables",
-               "dynamodb:DeleteItem",
-               "dynamodb:GetItem",
-               "dynamodb:Scan",
-               "dynamodb:Query",
-               "dynamodb:UpdateItem",
-               "dynamodb:UpdateTable"
-           ],
-           "Resource": "*"
-       }
-   ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3Bucket",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${var.bucket}/${var.media_dir}"
+      ]
+    },
+    {
+      "Sid": "S3Object",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${var.bucket}/${var.media_dir}*"
+      ]
+    }
+  ]
 }
 EOF
 }
 
 resource "aws_iam_role_policy_attachment" "ecs-task-role-policy-attachment" {
   role       = aws_iam_role.ecs_task_role.name
-  policy_arn = aws_iam_policy.dynamodb.arn
+  policy_arn = aws_iam_policy.s3_bucket.arn
 }
 
 
