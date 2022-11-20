@@ -4,6 +4,8 @@ from django.core.files.storage import FileSystemStorage
 from storages.backends.s3boto3 import S3Boto3Storage
 
 # TODO: disable DNS for domainname while in development
+# TODO: 500 error due to media_storage.py
+# likey due to missing aws credentials?
 
 
 class PrivateMediaStorage(S3Boto3Storage):
@@ -21,7 +23,7 @@ class PrivateMediaStorage(S3Boto3Storage):
     """
 
     default_acl = "private"
-    location = "test_media"
+    location = "test_media_fargate"
     file_overwrite = False
     bucket_name = "account-keeps-nonversioned"  # TODO: var me
 

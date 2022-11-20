@@ -28,6 +28,8 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
 ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(" ")
 DEBUG = env("DEBUG")
 DEFAULT_AUTO_FIELD = env("DEFAULT_AUTO_FIELD")
@@ -55,6 +57,7 @@ INSTALLED_APPS = [
     "blog.apps.BlogConfig",
     "users.apps.UsersConfig",
     "crispy_forms",
+    "storages",  # django-storages: media files on S3
 ]
 
 MIDDLEWARE = [
