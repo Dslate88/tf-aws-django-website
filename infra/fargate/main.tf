@@ -1,7 +1,6 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
-
 resource "aws_ecr_repository" "containers" {
   for_each             = toset(var.ecr_containers)
   name                 = each.value
@@ -163,7 +162,6 @@ resource "aws_ecs_task_definition" "main" {
     }
     ]
   )
-
   runtime_platform {
     operating_system_family = "LINUX"
     cpu_architecture        = "ARM64"
@@ -201,7 +199,6 @@ resource "aws_ecs_service" "main" {
     subnets          = var.priv_subnet_ids
     assign_public_ip = false
     security_groups  = [aws_security_group.ecs_tasks.id]
-    # security_groups  = [aws_security_group.ecs_tasks.id, aws_security_group.alb.id]
   }
   # lifecycle {
   #   ignore_changes = [task_definition]

@@ -87,12 +87,27 @@ TEMPLATES = [
     },
 ]
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+# use aws rds database backend if DEPLOY_ENV is prod and initiliaze DATABASES
+
+
+if os.environ["DEPLOY_ENV"] == "prod":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "<database_name>",
+            "USER": "<database_user>",
+            "PASSWORD": "<database_password>",
+            "HOST": "<database_endpoint>",
+            "PORT": "3306",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {

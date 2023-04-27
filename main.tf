@@ -23,6 +23,7 @@ locals {
   priv_cidrs       = ["10.0.1.0/24", "10.0.3.0/24"]
   priv_avail_zones = ["us-east-1a", "us-east-1b"]
   priv_nat_gateway = true
+  # priv_nat_gateway = false
 
   enable_s3_endpoint      = false
   enable_ecr_dkr_endpoint = false
@@ -30,8 +31,9 @@ locals {
   enable_ssm_endpoint     = false
 
   # ecr
-  ecr_containers     = ["django_nginx", "django_webapp"]
-  deploy_ecs_service = false
+  ecr_containers = ["django_nginx", "django_webapp"]
+  deploy_ecs_service = true
+  # deploy_ecs_service = false
 }
 
 module "vpc" {
@@ -70,3 +72,33 @@ module "fargate" {
   priv_subnet_ids    = module.vpc.priv_subnets
   deploy_ecs_service = local.deploy_ecs_service
 }
+
+
+# ## RDS
+# resource "aws_db_subnet_group" "default" {
+#   name       = "main"
+#   subnet_ids = [aws_subnet.frontend.id, aws_subnet.backend.id]
+#
+#   tags = {
+#     Name = "My DB subnet group"
+#   }
+# }
+#
+# # create aws rds mysql database resource
+# resource "aws_db_instance" "website_db" {
+#   allocated_storage    = 20
+#   storage_type         = "gp2"
+#   engine               = "mysql"
+#   engine_version       = "5.7"
+#   instance_class       = "db.t3.micro"
+#   name                 = "website_db"
+#   username             = "website_user"
+#   password             = "website_password"
+#   db_subnet_group_name = "dev-website-us-east-1a-private-subnet"
+#   # db_subnet_group_name = module.vpc.priv_subnets
+#   # vpc_security_group_ids = [
+#   #   module.vpc.vpc_security_group_id
+#   # ]
+#   publicly_accessible = false
+#   skip_final_snapshot = true
+# }

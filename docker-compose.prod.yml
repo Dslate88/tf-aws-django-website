@@ -7,5 +7,6 @@ services:
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_webapp:latest
 
   nginx:
-    build: ./nginx/prod
+    # build: ./nginx/prod
+    build: ./nginx/local
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_nginx:latest
