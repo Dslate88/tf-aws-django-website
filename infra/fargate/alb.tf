@@ -1,12 +1,13 @@
 resource "aws_lb_target_group" "main" {
   name        = "${var.stack_name}-tg-${var.env}"
   port        = 80
-  protocol    = "HTTP"
+  protocol    = "HTTP" # TODO: HTTPS
   vpc_id      = var.vpc_id
   target_type = "ip"
 
   health_check {
-    path                = "/"
+    port                = "traffic-port" # if fails then use port 80
+    path                = "/health"
     interval            = 30
     timeout             = 5
     healthy_threshold   = 2

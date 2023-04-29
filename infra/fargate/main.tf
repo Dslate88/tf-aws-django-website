@@ -52,15 +52,6 @@ resource "aws_security_group" "ecs_tasks" {
     self        = false
   }
 
-  # TODO: rm me
-  ingress {
-    protocol    = "tcp"
-    from_port   = 8000
-    to_port     = 8000
-    cidr_blocks = ["0.0.0.0/0"]
-    self        = false
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
@@ -103,14 +94,13 @@ resource "aws_cloudwatch_log_group" "django_container" {
 
 # TODO: clean this up into a module
 resource "aws_ecs_task_definition" "main" {
-  # TODO: add task_role_arn with needed perms...
   family                   = "${var.stack_name}-${var.env}-4"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  # task_role_arn            = aws_iam_role.ecs_task_role.arn
-  network_mode = "awsvpc"
-  cpu          = 256
-  memory       = 512
+  task_role_arn            = aws_iam_role.ecs_task_role.arn
+  network_mode             = "awsvpc"
+  cpu                      = 256
+  memory                   = 512
   # TODO: dynamnic generate containers...
   container_definitions = jsonencode([
     {
@@ -221,7 +211,6 @@ resource "aws_ecs_service" "main" {
   # }
 }
 
-# # create alias record for the load balancer
 resource "aws_route53_record" "main" {
   zone_id         = data.aws_route53_zone.main.id
   name            = "devinslate.com"
