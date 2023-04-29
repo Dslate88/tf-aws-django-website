@@ -17,7 +17,7 @@ class AboutView(generic.ListView):
 
     template_name = "blog/about.html"
 
-    def get_queryset(self):  # replace with static? or Author data_model...?
+    def get_queryset(self):  # TODO: replace with static? or Author data_model...?
         return Post.objects.order_by("-date_posted")[:5]
 
 
@@ -44,5 +44,5 @@ class PostUpdateView(generic.UpdateView):
 
 class PostDeleteView(generic.DeleteView):
     model = Post
-    template_name = "blog/post_delete.html"
+    template_name = "blog/post_confirm_delete.html"
     success_url = reverse_lazy("blog-home")
