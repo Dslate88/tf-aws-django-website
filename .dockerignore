@@ -1,3 +1,4 @@
 .env
 django/.env.webapp
 django/.env.webapp.prod
+backups/

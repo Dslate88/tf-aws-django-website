@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
-
+# TODO: django, add post category tags?
 locals {
   stack_name = "django-website"
   env        = "dev"
@@ -32,6 +32,7 @@ locals {
   # ecr
   ecr_containers     = ["django_nginx", "django_webapp"]
   deploy_ecs_service = false
+  # deploy_ecs_service = true
 }
 
 module "vpc" {

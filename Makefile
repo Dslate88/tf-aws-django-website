@@ -7,7 +7,7 @@ help:
 	make -pRrq  -f $(THIS_FILE) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 
 build:
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build $(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache$(c)
 
 up:
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d $(c)
@@ -29,3 +29,21 @@ prune:
 
 auth:
 	aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
+
+
+
+dev_build:
+	docker-compose -f docker-compose.yml build $(c)
+
+dev_up:
+	docker-compose -f docker-compose.yml up -d $(c)
+
+dev_down:
+	docker-compose -f docker-compose.yml down $(c)
+
+get_db:
+	# backup data locally
+	cp django/db.sqlite3 "backups/$(shell date +"%Y-%m-%-d-%H-%M-%S").db.sqlite3"
+
+    # extract db from container
+	docker cp $(shell docker ps -aqf "name=tf-aws-django-website_django"):home/app/db.sqlite3 django/db.sqlite3

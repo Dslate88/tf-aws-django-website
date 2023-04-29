@@ -24,6 +24,9 @@ django/.env.webapp.prod
 # django media
 django/media
 
+# db backups
+backups/
+
 #################################################
 # generated
 #################################################
