@@ -2,9 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-
+# TODO: convert body to markdown object, test image emedding? or just keep html???
 class Post(models.Model):
-    title = models.CharField(max_length=20)
+    title = models.CharField(max_length=100)
     body = models.TextField()
     date_posted = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)

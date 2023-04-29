@@ -16,7 +16,7 @@ from django.urls import path, include
 
 from users import views as v
 from blog.views import PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
-
+# TODO: make authorization checks for all routes..add/delete/update/etc...
 
 urlpatterns = [
     path("", include("blog.urls")),  # temporary
