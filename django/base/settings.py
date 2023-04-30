@@ -17,6 +17,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# TODO: review manage.py check --deploy for production readiness
+
 # load environment variables from proper .env file
 if os.environ["DEPLOY_ENV"] == "prod":
     environ.Env.read_env(os.path.join(BASE_DIR, ".env.webapp.prod"))
@@ -35,6 +37,7 @@ LANGUAGE_CODE = env("LANGUAGE_CODE")
 ROOT_URLCONF = env("ROOT_URLCONF")
 SECRET_KEY = env("SECRET_KEY")
 STATIC_URL = env("STATIC_URL")
+STATIC_ROOT = os.path.join(BASE_DIR, env("STATIC_ROOT"))
 TIME_ZONE = env("TIME_ZONE")
 USE_I18N = env("USE_I18N")
 USE_TZ = env("USE_TZ")
@@ -106,6 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static/",
-]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static/",
+# ]
