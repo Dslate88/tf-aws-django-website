@@ -11,6 +11,7 @@ django-environ = "*"
 gunicorn = "*"
 requests = "*"
 environ = "*"
+whitenoise = "*"
 
 [dev-packages]
 mypy = "*"
