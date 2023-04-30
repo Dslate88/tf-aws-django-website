@@ -7,10 +7,13 @@ help:
 	make -pRrq  -f $(THIS_FILE) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 
 build:
+	cp -r django/media/ nginx/prod/media/
+	cp -r django/static/ nginx/prod/static/
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache$(c)
 
 up:
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d $(c)
+	docker-compose -f docker-compose.yml exec django python manage.py collectstatic --no-input --clear
 
 push:
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml push $(c)

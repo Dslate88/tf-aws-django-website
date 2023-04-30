@@ -27,6 +27,12 @@ django/media
 # db backups
 backups/
 
+# media static files
+ nginx/local/media
+ nginx/local/static
+ nginx/prod/media
+ nginx/prod/static
+
 #################################################
 # generated
 #################################################
