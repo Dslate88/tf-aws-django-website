@@ -17,6 +17,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# TODO: review manage.py check --deploy for production readiness
+
 # load environment variables from proper .env file
 if os.environ["DEPLOY_ENV"] == "prod":
     environ.Env.read_env(os.path.join(BASE_DIR, ".env.webapp.prod"))
@@ -35,6 +37,7 @@ LANGUAGE_CODE = env("LANGUAGE_CODE")
 ROOT_URLCONF = env("ROOT_URLCONF")
 SECRET_KEY = env("SECRET_KEY")
 STATIC_URL = env("STATIC_URL")
+STATIC_ROOT = os.path.join(BASE_DIR, env("STATIC_ROOT"))
 TIME_ZONE = env("TIME_ZONE")
 USE_I18N = env("USE_I18N")
 USE_TZ = env("USE_TZ")
@@ -44,6 +47,7 @@ CRISPY_TEMPLATE_PACK = env("CRISPY_TEMPLATE_PACK")
 MEDIA_ROOT = os.path.join(BASE_DIR, env("MEDIA_ROOT"))
 MEDIA_URL = env("MEDIA_URL")
 
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -51,14 +55,17 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
     "blog.apps.BlogConfig",
     "users.apps.UsersConfig",
     "crispy_forms",
+    "crispy_bootstrap4",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "base.middleware.HealthCheckMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -104,8 +111,4 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
-]
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static/",
 ]

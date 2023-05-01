@@ -7,10 +7,14 @@ help:
 	make -pRrq  -f $(THIS_FILE) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 
 build:
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache$(c)
+	cp -r django/media/ nginx/prod/media/
+	cp -r django/static/ nginx/prod/static/
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build $(c)
 
+# TODO: add a grep for nginx prod upstream server setting, exit 1 if its not set for prod env
 up:
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d $(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec django python manage.py collectstatic --no-input --clear
 
 push:
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml push $(c)
@@ -45,3 +49,6 @@ get_db:
 
     # extract db from container
 	docker cp $(shell docker ps -aqf "name=tf-aws-django-website_django"):home/app/db.sqlite3 django/db.sqlite3
+
+requirements:
+	pipenv run pip freeze > django/requirements.txt

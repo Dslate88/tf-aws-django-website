@@ -46,7 +46,10 @@ urlpatterns = [
     path("post/add/", PostCreateView.as_view(), name="post-create"),
     path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
     path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
-    # django documented recommended pattern
-    # if debug==True then this evaluates
-    # TODO: refactor all this for S3, both local and production
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+]
+
+# django documented recommended pattern
+# TODO: refactor all this for S3, both local and production
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

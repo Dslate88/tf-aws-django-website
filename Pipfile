@@ -10,6 +10,9 @@ pillow = "*"
 django-environ = "*"
 gunicorn = "*"
 requests = "*"
+environ = "*"
+whitenoise = "*"
+crispy-bootstrap4 = "*"
 
 [dev-packages]
 mypy = "*"
