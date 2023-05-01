@@ -31,8 +31,8 @@ locals {
 
   # ecr
   ecr_containers     = ["django_nginx", "django_webapp"]
-  deploy_ecs_service = false
-  # deploy_ecs_service = true
+  # deploy_ecs_service = false
+  deploy_ecs_service = true
 }
 
 module "vpc" {

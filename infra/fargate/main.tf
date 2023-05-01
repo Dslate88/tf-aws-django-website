@@ -116,7 +116,7 @@ resource "aws_ecs_task_definition" "main" {
       command = [
         "nginx",
         "-g",
-        "daemon off;"
+        "daemon off;" # TODO: might want to change this to "on" for prod
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -142,18 +142,17 @@ resource "aws_ecs_task_definition" "main" {
           name = "DEPLOY_ENV", value = "prod"
         }
       ]
-      # environmentFiles = [
-      #   {
-      #     value = "s3://my-bucket/ecs-env-files/django.env"
-      #     type  = "s3"
-      #   }
-      # ]
       command = [
-        "gunicorn",
-        "base.wsgi:application",
-        "--bind",
-        "localhost:8000",
+        "/bin/sh",
+        "-c",
+        "python manage.py collectstatic --noinput && gunicorn base.wsgi:application --bind localhost:8000"
       ]
+      mountPoints = [{
+        sourceVolume  = "media_volume"
+        containerPath = "/home/app/web/media"
+        readOnly = false
+      }]
+
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -163,8 +162,11 @@ resource "aws_ecs_task_definition" "main" {
         }
       }
     }
-    ]
-  )
+  ])
+
+  volume {
+    name = "media_volume"
+  }
 
   runtime_platform {
     operating_system_family = "LINUX"

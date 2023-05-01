@@ -9,7 +9,7 @@ help:
 build:
 	cp -r django/media/ nginx/prod/media/
 	cp -r django/static/ nginx/prod/static/
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache$(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build $(c)
 
 # TODO: add a grep for nginx prod upstream server setting, exit 1 if its not set for prod env
 up:

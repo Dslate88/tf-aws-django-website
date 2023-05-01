@@ -6,16 +6,13 @@ services:
     command: gunicorn base.wsgi:application --bind 0.0.0.0:8000
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_webapp:latest
     volumes:
-      - static_volume:/home/app/static
-      - media_volume:/home/app/media
+      - media_volume:/home/app/web/media
 
   nginx:
     build: ./nginx/prod
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_nginx:latest
     volumes:
-      - static_volume:/home/app/static
-      - media_volume:/home/app/media
+      - media_volume:/home/app/web/media
 
 volumes:
   media_volume:
-  static_volume:
