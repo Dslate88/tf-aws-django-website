@@ -27,9 +27,8 @@ make requirements
 
 ------------------------------------------------------------------------------
 ## TODOs
-- fix the mess of the Makefile add params
 - eventually migrate to K8
 - add diagrams
 - improve how I am using sqllite, rds replace?
-- django html template specifically for prompt_engineering posts?
+- django html template specifically for promptEngineering posts?
 - review manage.py check --deploy for production readiness
