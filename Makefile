@@ -11,6 +11,9 @@ build:
 	cp -r django/static/ nginx/prod/static/
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build $(c)
 
+dev_build:
+	docker-compose -f docker-compose.yml build $(c)
+
 # TODO: add a grep for nginx prod upstream server setting, exit 1 if its not set for prod env
 up:
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d $(c)
@@ -39,6 +42,8 @@ dev_build:
 
 dev_up:
 	docker-compose -f docker-compose.yml up -d $(c)
+	# docker-compose -f docker-compose.yml exec django python manage.py collectstatic --no-input --clear
+	# docker-compose -f docker-compose.yml exec django python manage.py makemigrations
 
 dev_down:
 	docker-compose -f docker-compose.yml down $(c)
@@ -52,3 +57,11 @@ get_db:
 
 requirements:
 	pipenv run pip freeze > django/requirements.txt
+
+make debug:
+	make dev_down
+	make dev_build
+	make dev_up
+
+make server:
+	cd django && python manage.py runserver

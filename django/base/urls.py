@@ -18,20 +18,22 @@ from users import views as v
 from blog.views import PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
 # TODO: make authorization checks for all routes..add/delete/update/etc...
 
+
 urlpatterns = [
     path("", include("blog.urls")),  # temporary
     path("admin/", admin.site.urls),
+    path('markdownx/', include('markdownx.urls')),
     path("blog/", include("blog.urls")),
     path(
         "profile/",
         v.UserProfileView.as_view(template_name="users/profile.html"),
         name="user-profile",
     ),
-    path(
-        "register/",
-        v.UserRegisterView.as_view(template_name="users/register.html"),
-        name="user-register",
-    ),
+    # path(
+    #     "register/",
+    #     v.UserRegisterView.as_view(template_name="users/register.html"),
+    #     name="user-register",
+    # ),
     path(
         "login/",
         auth_views.LoginView.as_view(template_name="users/login.html"),

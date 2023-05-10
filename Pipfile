@@ -13,6 +13,7 @@ requests = "*"
 environ = "*"
 whitenoise = "*"
 crispy-bootstrap4 = "*"
+django-markdownx = "*"
 
 [dev-packages]
 mypy = "*"
