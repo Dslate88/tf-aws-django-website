@@ -20,9 +20,9 @@ from blog.views import PostDetailView, PostCreateView, PostUpdateView, PostDelet
 
 
 urlpatterns = [
-    path("", include("blog.urls")),  # temporary
     path("admin/", admin.site.urls),
     path('markdownx/', include('markdownx.urls')),
+    path("", include("blog.urls")),  # temporary
     path("blog/", include("blog.urls")),
     path(
         "profile/",

@@ -5,11 +5,11 @@
 
     {% for post in post_list %}
     <div class="col d-flex justify-content-center mb-5">
-        <img class="rounded-square" src="{{ post.author.profile.image.url }}">
+            <img class="rounded-square" src="{{ post.image.url }}" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
             <div class="card" style="width: 45rem;">
                 <div class="card-header">{{ post.title }}</div>
               <div class="card-body">
-                <p class="card-text">{{ post.body }}</p>
+                <p class="card-text">{{ post.summary }}</p>
                 <a href="{% url "post-detail" post.pk %}">Read More</a>
               </div>
             </div>
@@ -17,3 +17,4 @@
     {% endfor %}
 
 {% endblock content %}
+
