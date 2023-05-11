@@ -3,28 +3,27 @@
 
 {% block content %}
 <div class="container mt-5">
-
     <!-- Profile Section -->
     <div class="row justify-content-center">
-        <div class="col-md-4">
-            <img class="rounded-square" src="{{ user.profile.image.url }}" style="display: block; margin-left: auto; margin-right: auto; width: 80%;">
+        <div class="col-md-4 text-center">
+            <img class="rounded-square img-fluid" src="{{ user.profile.image.url }}" alt="Profile image">
         </div>
         <div class="col-md-8">
-            <h2>Devin Slate</h2>
-            <p>Exploring AI, learning how to engineer for the future, and drawing inspiration from nature.</p>
+            <h2 class="mt-4">Devin Slate</h2>
+            <p class="lead">Exploring AI, learning how to engineer for the future, and drawing inspiration from nature.</p>
         </div>
     </div>
 
-    <hr class="my-4">  <!-- Reduced margin -->
+    <hr class="my-4">
 
     <!-- About the Site Section -->
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <h2>Why did I create this website?</h2>
+            <h2 class="mt-4">Why did I create this website?</h2>
             <ul>
-                <li>This site is a central platform for my research and exploration of Large Language Models (LLMs).</li>
-                <li>As part of my engineering journey, I firmly believe in the power of shared knowledge and experiences.</li>
-                <li>Here, you'll find a diverse range of content, including:
+                <li class="lead">This site is a central platform for my research and exploration of Large Language Models (LLMs).</li>
+                <li class="lead">As part of my engineering journey, I firmly believe in the power of shared knowledge and experiences.</li>
+                <li class="lead">Here, you'll find a diverse range of content, including:
                     <ul>
                         <li>Personal engineering projects that I am actively working on or have completed</li>
                         <li>Code snippets and programming insights related to my work</li>
@@ -32,11 +31,10 @@
                         <li>Research papers, along with my interpretations and insights</li>
                     </ul>
                 </li>
-                <li>Whether you're an AI enthusiast, a fellow engineer doing research, or just someone with a curiosity for technology and AI, I intend to share my journey with you.</li>
+                <li class="lead">Whether you're an AI enthusiast, a fellow engineer doing research, or just someone with a curiosity for technology and AI, I intend to share my journey with you.</li>
             </ul>
         </div>
     </div>
-
 </div>
 {% endblock %}
 
