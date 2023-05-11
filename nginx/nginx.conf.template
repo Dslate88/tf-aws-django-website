@@ -12,13 +12,12 @@ http {
   client_max_body_size 5M;
 
   upstream django {
-    # TODO: create shell script to identify which upstream pattern to use
-    server 127.0.0.1:8000; # awsvpc local loopback
-    # server django:8000; # local docker
+    # Use the environment variable $UPSTREAM_SERVER for the server address
+    server ${UPSTREAM_SERVER};
   }
 
   server {
-    listen 80; # TODO: change to 443, update container definition for nginx as well..
+    listen 80;
 
     # Nginx will reject anything not matching /
     location / {
@@ -43,3 +42,4 @@ http {
     }
   }
 }
+

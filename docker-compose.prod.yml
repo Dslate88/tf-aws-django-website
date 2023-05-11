@@ -9,7 +9,7 @@ services:
       - media_volume:/home/app/web/media
 
   nginx:
-    build: ./nginx/prod
+    build: ./nginx
     image: ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/django_nginx:latest
     volumes:
       - media_volume:/home/app/web/media

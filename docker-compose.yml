@@ -11,7 +11,7 @@ services:
       - django-network
 
   nginx:
-    build: ./nginx/local
+    build: ./nginx
     restart: always
     ports:
       - 80:80
