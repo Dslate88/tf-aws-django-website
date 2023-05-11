@@ -66,13 +66,3 @@ class PostDeleteView(generic.DeleteView):
     model = Post
     template_name = "blog/post_confirm_delete.html"
     success_url = reverse_lazy("blog-home")
-
-
-# def messages(request, file_name):
-#     try:
-#         with open(f'static/conversations/{file_name}.json', 'r') as f:
-#             messages = json.load(f)
-#     except FileNotFoundError:
-#         raise Http404('Conversation does not exist')
-#
-#     return render(request, 'blog/conversation.html', {'messages': messages})
