@@ -42,9 +42,6 @@ class PostUpdateView(generic.UpdateView):
     fields = ["title", "body"]
     template_name = "blog/post_form.html"
 
-
-
-
 class PostDetailView(generic.DetailView):
     model = Post
     template_name = "blog/post_detail.html"
@@ -56,13 +53,13 @@ class PostDetailView(generic.DetailView):
         if post.conversation_file:
             try:
                 with open(f'static/conversations/{post.conversation_file}.json', 'r') as f:
-                    messages = json.load(f)
+                    conversation = json.load(f)
             except FileNotFoundError:
-                messages = []  # TODO: or handle this error differently
+                conversation = []  # TODO: or handle this error differently
         else:
-            messages = [] # TODO: handle
+            conversation = [] # TODO: handle
 
-        context['messages'] = messages
+        context['conversation'] = conversation
         return context
 
 class PostDeleteView(generic.DeleteView):
@@ -71,11 +68,11 @@ class PostDeleteView(generic.DeleteView):
     success_url = reverse_lazy("blog-home")
 
 
-def messages(request, file_name):
-    try:
-        with open(f'static/conversations/{file_name}.json', 'r') as f:
-            messages = json.load(f)
-    except FileNotFoundError:
-        raise Http404('Conversation does not exist')
-
-    return render(request, 'blog/messages.html', {'messages': messages})
+# def messages(request, file_name):
+#     try:
+#         with open(f'static/conversations/{file_name}.json', 'r') as f:
+#             messages = json.load(f)
+#     except FileNotFoundError:
+#         raise Http404('Conversation does not exist')
+#
+#     return render(request, 'blog/conversation.html', {'messages': messages})

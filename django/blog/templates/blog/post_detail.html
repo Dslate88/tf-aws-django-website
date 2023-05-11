@@ -23,7 +23,7 @@
 
     {% if post.conversation_file %}
         <h2>Conversation</h2>
-        {% include "blog/messages.html" with messages=messages %}
+        {% include "blog/conversation.html" with conversation=conversation %}
 
     {% endif %}
 
