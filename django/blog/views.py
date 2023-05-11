@@ -1,5 +1,9 @@
+import json
+
 from django.views import generic
 from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, render
+from django.http import Http404
 
 from .models import Post, User
 
@@ -23,11 +27,6 @@ class AboutView(generic.ListView):
         return Post.objects.order_by("-date_posted")[:5]
 
 
-class PostDetailView(generic.DetailView):
-    model = Post
-    template_name = "blog/post_detail.html"
-
-
 class PostCreateView(generic.CreateView):
     model = Post
     fields = ["title", "body"]
@@ -44,7 +43,39 @@ class PostUpdateView(generic.UpdateView):
     template_name = "blog/post_form.html"
 
 
+
+
+class PostDetailView(generic.DetailView):
+    model = Post
+    template_name = "blog/post_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        post = get_object_or_404(Post, pk=self.kwargs.get('pk'))
+        if post.conversation_file:
+            try:
+                with open(f'static/conversations/{post.conversation_file}.json', 'r') as f:
+                    messages = json.load(f)
+            except FileNotFoundError:
+                messages = []  # TODO: or handle this error differently
+        else:
+            messages = [] # TODO: handle
+
+        context['messages'] = messages
+        return context
+
 class PostDeleteView(generic.DeleteView):
     model = Post
     template_name = "blog/post_confirm_delete.html"
     success_url = reverse_lazy("blog-home")
+
+
+def messages(request, file_name):
+    try:
+        with open(f'static/conversations/{file_name}.json', 'r') as f:
+            messages = json.load(f)
+    except FileNotFoundError:
+        raise Http404('Conversation does not exist')
+
+    return render(request, 'blog/messages.html', {'messages': messages})

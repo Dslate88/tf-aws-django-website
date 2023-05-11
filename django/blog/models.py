@@ -15,6 +15,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     summary = models.CharField(max_length=500)
     image = models.ImageField(default="kairos_default.jpg")
+    conversation_file = models.CharField(max_length=100, null=True, blank=True)
+
     img_size = (2400, 1600)
 
     def __str__(self):

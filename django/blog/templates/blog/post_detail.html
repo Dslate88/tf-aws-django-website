@@ -21,6 +21,12 @@
         <a href="{% url "blog-home" %}">Back</a>
     </button>
 
+    {% if post.conversation_file %}
+        <h2>Conversation</h2>
+        {% include "blog/messages.html" with messages=messages %}
+
+    {% endif %}
+
 
 {% endblock %}
 
