@@ -24,6 +24,15 @@ make requirements
     - use `make get_db` for now...
     - TODO: improve on this...
 
+## early posting workflow
+- make server, localhost:8000, this will store media/static in django dir
+    - if it looks good, make debug
+    - confirm the post works with compose deploy + nginx, this matches prod as much as possible
+    - make debug env=prod
+    - make auth and make push
+- thoughts on improvements later:
+    - sooner...reduce above steps where you can
+    - later...gitops this...automate it completely
 
 ------------------------------------------------------------------------------
 ## TODOs
