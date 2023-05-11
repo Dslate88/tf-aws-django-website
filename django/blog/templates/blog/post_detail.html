@@ -1,32 +1,40 @@
 {% extends "base.html" %}
+
 {% load static %}
 
 {% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h1 class="mt-4">{{ post.title }}</h1>
 
-    <h1> {{ post.title }}</h1>
+                <p class="lead">
+                    By: {{ post.author }} - {{ post.date_posted }}
+                </p>
 
-    <small>
-        By: {{post.author }} - {{post.date_posted}}
-    </small>
+                <hr>
 
-    <hr><br/>
+                <div class="text-center">
+                    <img class="rounded-square img-fluid" src="{{ post.image.url }}" alt="Post image">
+                </div>
 
-    <img class="rounded-square" src="{{ post.image.url }}" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
+                <hr>
 
-    {{ post.formatted_markdown|safe }}
+                <p class="lead">{{ post.formatted_markdown|safe }}</p>
 
-    <br/><br/>
+                <div class="mb-4">
+                    <button type="button" class="btn btn-outline-secondary">
+                        <a href="{% url 'blog-home' %}">Back</a>
+                    </button>
+                </div>
 
-    <button type="button" class="btn btn-outline-secondary">
-        <a href="{% url "blog-home" %}">Back</a>
-    </button>
-
-    {% if post.conversation_file %}
-        <h2>Conversation</h2>
-        {% include "blog/conversation.html" with conversation=conversation %}
-
-    {% endif %}
-
-
+                {% if post.conversation_file %}
+                    <hr>
+                    <h2>Conversation</h2>
+                    {% include "blog/conversation.html" with conversation=conversation %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
