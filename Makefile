@@ -7,12 +7,13 @@ include .env
 # 	make -pRrq  -f $(THIS_FILE) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 
 build:
+	#TODO: just store me in nginx/ and rm from django/
 	cp -r django/media/ nginx/media/
 	cp -r django/static/ nginx/static/
 
 ifeq ($(env),prod)
 	cd nginx && ./generate_nginx_conf.sh 127.0.0.1:8000
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build $(c)
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache $(c)
 else
 	cd nginx && ./generate_nginx_conf.sh django:8000
 	docker-compose -f docker-compose.yml build $(c)

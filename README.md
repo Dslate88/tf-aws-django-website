@@ -34,9 +34,18 @@ make requirements
     - sooner...reduce above steps where you can
     - later...gitops this...automate it completely
 
+## media and static
+- media via reverse proxy
+- static handled via whitenoise
+   - TODO: css not loading /admin/, staticfiles issue somewhere in prod...whitenoise blame?
+
+## FIX ME FIRST
+ - /admin/ in prod, throwing 404 on UN/PW login, it tries to load ImagePIL for Author and not found.  Did I delete it?
+
 ------------------------------------------------------------------------------
 ## TODOs
 - eventually migrate to K8
+- gitignore requirements.txt
 - add diagrams
 - improve how I am using sqllite, rds replace?
 - django html template specifically for promptEngineering posts?
