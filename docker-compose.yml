@@ -7,8 +7,8 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     expose:
       - 8000
-    networks:
-      - django-network
+    # volumes:
+    #   - media_volume:/home/app/web/media
 
   nginx:
     build: ./nginx
@@ -17,8 +17,8 @@ services:
       - 80:80
     depends_on:
       - django
-    networks:
-      - django-network
+    # volumes:
+    #   - media_volume:/home/app/web/media
 
-networks:
-  django-network:
+# volumes:
+#   media_volume:

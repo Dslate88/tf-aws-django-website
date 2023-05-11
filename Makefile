@@ -25,7 +25,7 @@ ifeq ($(env),prod)
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec django python manage.py collectstatic --no-input --clear
 else
 	docker-compose -f docker-compose.yml up -d $(c)
-	# TODO: this may need collectstatic
+	docker-compose -f docker-compose.yml exec django python manage.py collectstatic --no-input --clear
 endif
 
 push:
@@ -71,10 +71,12 @@ ifeq ($(env),prod)
 	make down env=prod
 	make build env=prod
 	make up env=prod
+	make get_db
 else
 	make down
 	make build
 	make up
+	make logs
 endif
 
 server:
