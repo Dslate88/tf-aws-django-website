@@ -8,6 +8,6 @@ RUN mkdir $HOME/static
 RUN mkdir $HOME/media
 
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY media/ /home/app/web/media/
+COPY media/. /home/app/web/media/
 
 VOLUME ["/home/app/web/media"]

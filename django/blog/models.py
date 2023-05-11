@@ -14,7 +14,7 @@ class Post(models.Model):
     date_updated = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     summary = models.CharField(max_length=500)
-    image = models.ImageField(default="kairos_default.jpg", upload_to="posts")
+    image = models.ImageField(default="kairos_default.jpg")
     img_size = (2400, 1600)
 
     def __str__(self):
