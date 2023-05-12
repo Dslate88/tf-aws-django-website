@@ -15,7 +15,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
 from users import views as v
-from blog.views import PostDetailView, PostCreateView, PostUpdateView, PostDeleteView
+from blog.views import PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, ConversationView
 # TODO: make authorization checks for all routes..add/delete/update/etc...
 
 
@@ -48,7 +48,7 @@ urlpatterns = [
     path("post/add/", PostCreateView.as_view(), name="post-create"),
     path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
     path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
-
+    path('post/<int:pk>/conversation/', ConversationView.as_view(), name='post-conversation'),
 ]
 
 # django documented recommended pattern

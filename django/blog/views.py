@@ -87,3 +87,24 @@ class PostDeleteView(generic.DeleteView):
     model = Post
     template_name = "blog/post_confirm_delete.html"
     success_url = reverse_lazy("blog-home")
+
+class ConversationView(generic.DetailView):
+    model = Post
+    template_name = "blog/conversation.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        post = get_object_or_404(Post, pk=self.kwargs.get('pk'))
+        if post.conversation_file:
+            try:
+                with open(f'static/conversations/{post.conversation_file}.json', 'r') as f:
+                    conversation = json.load(f)
+            except FileNotFoundError:
+                conversation = []
+        else:
+            conversation = []
+
+        context['conversation'] = conversation
+        return context
+
