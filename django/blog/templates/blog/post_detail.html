@@ -3,29 +3,22 @@
 {% load static %}
 
 {% block content %}
+
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="d-flex align-items-center">
                     <h1 class="mt-4 flex-grow-1">{{ post.title }}</h1>
-                    <button type="button" class="btn btn-outline-secondary mr-3">
-                        <a href="{% url 'blog-home' %}" class="text-decoration-none text-dark">Back to Blog</a>
-                    </button>
 
                 </div>
 
                 <p class="lead">
                     By: {{ post.author }} - {{ post.date_posted }}
                 </p>
+                <button type="button" class="btn btn-outline-secondary mc-3">
+                    <a href="{% url 'blog-home' %}" class="text-decoration-none text-dark">Back to Posts</a>
+                </button>
 
-                <hr>
-                    {% if post.conversation_file %}
-                    <div class="mt-4">
-                        <button type="button" class="btn btn-outline-secondary mr-3">
-                            <a href="{% url 'post-conversation' post.pk %}" class="text-decoration-none text-dark">View Full Conversation</a>
-                        </button>
-                    </div>
-                    {% endif %}
                 <hr>
 
                 <div class="text-center">
@@ -36,8 +29,15 @@
 
                 <p class="lead">{{ post.formatted_markdown|safe }}</p>
 
+                {% if post.conversation_file %}
+                <div class="mt-4">
+                    <button type="button" class="btn btn-outline-secondary mr-3">
+                        <a href="{% url 'post-conversation' post.pk %}" class="text-decoration-none text-dark">Read Full Conversation</a>
+                    </button>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
-
 {% endblock %}
+
