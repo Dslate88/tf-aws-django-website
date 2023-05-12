@@ -59,7 +59,6 @@ make requirements
 - gitignore requirements.txt
 - add diagrams
 - improve how I am using sqllite, rds replace?
-- django html template specifically for promptEngineering posts?
 - review manage.py check --deploy for production readiness
-- add admin button for authorized users (AKA ME)
 - either check-in static files or create backup mechanism (upon push, always push to s3?)
+- enable search logic for users to find articles (include tags/categories at this time too?)
