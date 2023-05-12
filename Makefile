@@ -23,10 +23,10 @@ endif
 up:
 ifeq ($(env),prod)
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d $(c)
-	docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec django python manage.py collectstatic --no-input --clear
+	docker-compose -f docker-compose.yml -f docker-compose.prod.yml exec django python manage.py collectstatic --no-input
 else
 	docker-compose -f docker-compose.yml up -d $(c)
-	docker-compose -f docker-compose.yml exec django python manage.py collectstatic --no-input --clear
+	docker-compose -f docker-compose.yml exec django python manage.py collectstatic --no-input
 endif
 
 push:
