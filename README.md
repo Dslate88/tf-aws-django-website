@@ -54,8 +54,12 @@ make requirements
 ------------------------------------------------------------------------------
 ## TODOs
 - eventually migrate to K8
+- add note on ai generated art
+- add dependency check for vulnerability alerts, dependabot? (do security review while at it...code.envvars.secrets.etc)
 - gitignore requirements.txt
 - add diagrams
 - improve how I am using sqllite, rds replace?
 - django html template specifically for promptEngineering posts?
 - review manage.py check --deploy for production readiness
+- add admin button for authorized users (AKA ME)
+- either check-in static files or create backup mechanism (upon push, always push to s3?)
