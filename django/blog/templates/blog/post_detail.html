@@ -6,7 +6,12 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <h1 class="mt-4">{{ post.title }}</h1>
+                <div class="mt-4 mb-3 d-flex align-items-center">
+                    <button type="button" class="btn btn-outline-secondary mr-3">
+                        <a href="{% url 'blog-home' %}" class="text-decoration-none text-dark">back</a>
+                    </button>
+                    <h1>{{ post.title }}</h1>
+                </div>
 
                 <p class="lead">
                     By: {{ post.author }} - {{ post.date_posted }}
@@ -22,12 +27,6 @@
 
                 <p class="lead">{{ post.formatted_markdown|safe }}</p>
 
-                <div class="mb-4">
-                    <button type="button" class="btn btn-outline-secondary">
-                        <a href="{% url 'blog-home' %}">Back</a>
-                    </button>
-                </div>
-
                 {% if post.conversation_file %}
                     <hr>
                     <h2>Conversation</h2>
@@ -37,4 +36,3 @@
         </div>
     </div>
 {% endblock %}
-
