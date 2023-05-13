@@ -1,10 +1,14 @@
-<!DOCTYPE html>
 {% extends "base.html" %}
 
 {% block content %}
+    <style>
+      body {
+        background-color: DarkGray
+      }
+    </style>
 
     {% for post in post_list %}
-        <div class="card mb-4" style="margin-left: auto; margin-right: auto; width: 70%;">
+        <div class="card mb-4 border-dark border-2" style="margin-left: auto; margin-right: auto; width: 70%;">
             <img class="rounded-square" src="{{ post.image.url }}" >
           <div class="card-body">
               <h5 class="card-title">{{post.title}}</h5>
@@ -15,3 +19,4 @@
     {% endfor %}
 
 {% endblock content %}
+
