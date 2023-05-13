@@ -3,8 +3,7 @@
 {% load static %}
 
 {% block content %}
-
-    <div class="container">
+   <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="d-flex align-items-center">
@@ -36,6 +35,21 @@
                     </button>
                 </div>
                 {% endif %}
+
+                {% for entry in blocks %}
+                    <!-- illustrate code/conversation -->
+                    {% if entry.type == "text" %}
+                        <p class="lead">{{ entry.content }}</p>
+                    <!-- provide code snippet, formatted -->
+                    {% elif entry.type == "code" %}
+                        <pre><code>{{ entry.content }}</code></pre>
+                    <!-- template conversation, readability -->
+                    {% else %}
+                        {% include 'blog/conversation_block.html' with conversation_slice=entry.content %}
+                    {% endif %}
+
+                {% endfor %}
+
             </div>
         </div>
     </div>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+{% extends "blog/conversation_base.html" %}
+
+{% load static %}
+
+{% block conversation_content %}
+
+    <style>
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            overflow-y: auto;
+        }
+    </style>
+
+    {% for message in conversation %}
+        {% if message.sender == "user1" %}
+            <div class="sender1">
+                <img class="avatar" src="{% static 'images/devin.jpg' %}">
+                <div class="message user1">
+                    {{ message.text|linebreaks }}
+                </div>
+            </div>
+        {% else %}
+            <div class="sender2">
+                <div class="message user2">
+                    {{ message.text|linebreaks }}
+                </div>
+                <img class="avatar" src="{% static 'images/ai_avatar.png' %}">
+            </div>
+        {% endif %}
+    {% endfor %}
+
+{% endblock conversation_content %}
+
+

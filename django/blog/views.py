@@ -50,7 +50,7 @@ class PostUpdateView(generic.UpdateView):
     fields = ["title", "body"]
     template_name = "blog/post_form.html"
 
-class PostDetailView(generic.DetailView):
+class PostDetailView_orig(generic.DetailView):
     """
     View for displaying a single blog post in detail.
     """
@@ -79,6 +79,31 @@ class PostDetailView(generic.DetailView):
         context['conversation'] = conversation
         return context
 
+
+class PostDetailView(generic.DetailView):
+    model = Post
+    template_name = "blog/post_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        post = self.object
+        if post.conversation_file:
+            with open(f'static/conversations/{post.conversation_file}', 'r') as f:
+                conversation = json.load(f)
+            conversation_dict = {msg['idx']: msg for msg in conversation}
+            blocks = []
+            # print(post.blocks)
+            for block in post.get_blocks():
+                if block['type'] == 'conversation':
+                    start, end = block['content'].split('-')
+                    block_conversation = [conversation_dict[i] for i in range(int(start), int(end) + 1)]
+                    blocks.append({'type': 'conversation', 'content': block_conversation})
+                else:
+                    blocks.append(block)
+            context['blocks'] = blocks
+        return context
+
+
 # TODO: rm and just keep admin?
 class PostDeleteView(generic.DeleteView):
     """
@@ -90,7 +115,7 @@ class PostDeleteView(generic.DeleteView):
 
 class ConversationView(generic.DetailView):
     model = Post
-    template_name = "blog/conversation.html"
+    template_name = "blog/conversation_full.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -98,7 +123,7 @@ class ConversationView(generic.DetailView):
         post = get_object_or_404(Post, pk=self.kwargs.get('pk'))
         if post.conversation_file:
             try:
-                with open(f'static/conversations/{post.conversation_file}.json', 'r') as f:
+                with open(f'static/conversations/{post.conversation_file}', 'r') as f:
                     conversation = json.load(f)
             except FileNotFoundError:
                 conversation = []
