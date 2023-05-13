@@ -32,6 +32,9 @@ nginx/media/**
 nginx/static/**
 nginx/nginx.conf
 
+# python requirements
+django/requirements.txt
+
 #################################################
 # generated
 #################################################
