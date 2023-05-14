@@ -214,13 +214,13 @@ resource "aws_ecs_service" "main" {
 }
 
 resource "aws_route53_record" "main" {
-  zone_id         = data.aws_route53_zone.main.id
-  name            = "devinslate.com"
-  allow_overwrite = true
-  type            = "A"
+  zone_id = data.aws_route53_zone.main.id
+  name    = "devinslate.com"
+  type    = "A"
+
   alias {
-    name                   = aws_lb.main.dns_name
-    zone_id                = aws_lb.main.zone_id
+    name                   = aws_cloudfront_distribution.s3_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.s3_distribution.hosted_zone_id
     evaluate_target_health = false
   }
 }
@@ -302,4 +302,59 @@ resource "aws_sns_topic_subscription" "alarm_sms" {
   topic_arn = aws_sns_topic.alarm.arn
   protocol  = "sms"
   endpoint  = var.alert_phone_number
+}
+
+resource "aws_cloudfront_distribution" "s3_distribution" {
+  origin {
+    domain_name = aws_lb.main.dns_name
+    origin_id   = "alb_origin"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.1", "TLSv1.2"]
+    }
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  comment             = "Cloudfront Distribution pointing to ALB"
+  default_root_object = "home.html"
+
+  default_cache_behavior {
+    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = "alb_origin"
+
+    forwarded_values {
+      query_string = true
+      headers      = ["*"]
+
+      cookies {
+        forward = "all"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+
+  viewer_certificate {
+    acm_certificate_arn            = aws_acm_certificate.cert.arn
+    ssl_support_method             = "sni-only"
+    minimum_protocol_version       = "TLSv1.2_2018"
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  tags = {
+    Environment = "production"
+  }
 }
