@@ -15,6 +15,9 @@ class HomeView(generic.ListView):
     template_name = "blog/home.html"
     context_object_name = "post_list"
 
+    def get_queryset(self):
+        return Post.objects.order_by('-date_posted')
+
 class AboutView(generic.ListView):
     """
     View for the About page.
@@ -49,35 +52,6 @@ class PostUpdateView(generic.UpdateView):
     model = Post
     fields = ["title", "body"]
     template_name = "blog/post_form.html"
-
-class PostDetailView_orig(generic.DetailView):
-    """
-    View for displaying a single blog post in detail.
-    """
-    model = Post
-    template_name = "blog/post_detail.html"
-
-    def get_context_data(self, **kwargs):
-        """
-        If a post has a related conversation file, add the conversation data to the context.
-
-        :param kwargs: Additional keyword arguments
-        :return: context
-        """
-        context = super().get_context_data(**kwargs)
-
-        post = get_object_or_404(Post, pk=self.kwargs.get('pk'))
-        if post.conversation_file:
-            try:
-                with open(f'static/conversations/{post.conversation_file}.json', 'r') as f:
-                    conversation = json.load(f)
-            except FileNotFoundError:
-                conversation = []  # TODO: or handle this error differently
-        else:
-            conversation = [] # TODO: handle
-
-        context['conversation'] = conversation
-        return context
 
 
 class PostDetailView(generic.DetailView):
