@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block content %}
 <div class="container mt-5">
+
     <!-- Profile Section -->
     <div class="row justify-content-center">
-        <div class="col-md-4 text-center">
-            <img class="rounded-square img-fluid" src="{{ user.profile.image.url }}" alt="Profile image">
-        </div>
-        <div class="col-md-8">
-            <h2 class="mt-4">Devin Slate</h2>
-            <p class="lead">Exploring AI, learning how to engineer for the future, and drawing inspiration from nature.</p>
-        </div>
+      <div class="col-md-4 text-center">
+        <img src="{% static 'images/devin.jpg' %}" alt="Profile Image" class="img-fluid" style="max-width: 100%;">
+      </div>
+      <div class="col-md-8">
+        <h2 class="mt-4">Devin Slate</h2>
+        <p class="lead">Exploring AI, learning how to engineer for the future, and drawing inspiration from nature.</p>
+      </div>
     </div>
 
     <hr class="my-4">
