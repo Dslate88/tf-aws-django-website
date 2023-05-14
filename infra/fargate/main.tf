@@ -150,7 +150,7 @@ resource "aws_ecs_task_definition" "main" {
       mountPoints = [{
         sourceVolume  = "media_volume"
         containerPath = "/home/app/web/media"
-        readOnly = false
+        readOnly      = false
       }]
 
       logConfiguration = {
@@ -343,9 +343,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn            = aws_acm_certificate.cert.arn
-    ssl_support_method             = "sni-only"
-    minimum_protocol_version       = "TLSv1.2_2018"
+    acm_certificate_arn      = aws_acm_certificate.cert.arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2018"
   }
 
   restrictions {

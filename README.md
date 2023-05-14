@@ -23,6 +23,7 @@ The production architecture of the application is as follows:
 - A client makes a secure HTTPS request to the domain.
 - The Application Load Balancer (ALB) receives this request. The ALB has been configured with an SSL certificate from AWS Certificate Manager (ACM). The ALB uses this certificate to decrypt the HTTPS request and turns it into a standard HTTP request.
 - The ALB then forwards this HTTP request to one of the targets in its target group. In this case, these targets are the tasks running in the ECS service.
+- Requests hit the nginx reverse proxy, terminating tls encryption, but we are now in a private subnet which is locked down, nginx proxies request to the django application container on port 8000.
 
 ## Features
 
@@ -43,9 +44,15 @@ The core of this project is a Django-based blog application.
 - Responsive Design: The blog is designed to be responsive, making it accessible on various devices like desktops, laptops, and mobile phones.
 
 ### Features: backlog
+- micro-service applications powered by Aritificial Intelligence API's.
 - Categories/Tags: Posts can be categorized or tagged for easy navigation and searchability.
 - Search: Users can search for blog posts based on keywords or tags.
 - Commenting System: Readers can comment on blog posts, facilitating discussions and interactions between the blog post author and readers.
+- CICD/Pipeline: github actions
+- monitoring: traffic and security
+- backup and disaster recovery: RDS review and/or static/media/db cloud backups
+- secrets manager: integrate with service for future api access needs
+
 
 ## Design & Frontend
 

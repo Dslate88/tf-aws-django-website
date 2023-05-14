@@ -1,7 +1,9 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+# TODO: set via .bash_profile, secrets_manager later?
 variable "alert_phone_number" {}
+
 
 locals {
   stack_name = "django-website"
