@@ -175,7 +175,7 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_service" "main" {
-  count                              = var.deploy_ecs_service ? 1 : 0
+  # count                              = var.deploy_ecs_service ? 1 : 0
   name                               = "${var.stack_name}-service-${var.env}"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.main.arn
@@ -250,4 +250,29 @@ resource "aws_route53_record" "validation" {
   ttl             = 60
   type            = each.value.type
   zone_id         = data.aws_route53_zone.main.zone_id
+}
+
+resource "aws_appautoscaling_target" "ecs_target" {
+  max_capacity       = 10
+  min_capacity       = 1
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.main.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
+
+resource "aws_appautoscaling_policy" "ecs_policy" {
+  name               = "cpu-utilization"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+    target_value       = 50.0
+    scale_in_cooldown  = 300
+    scale_out_cooldown = 300
+  }
 }
