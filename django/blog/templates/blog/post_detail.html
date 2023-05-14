@@ -1,23 +1,36 @@
 {% extends "base.html" %}
 
+{% block title %}
+  {{ post.title }} | devinslate.com
+{% endblock %}
+
 {% load static %}
 
 {% block content %}
-
-    <div class="container">
+   <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="d-flex align-items-center">
                     <h1 class="mt-4 flex-grow-1">{{ post.title }}</h1>
-
                 </div>
 
                 <p class="lead">
                     By: {{ post.author }} - {{ post.date_posted }}
                 </p>
-                <button type="button" class="btn btn-outline-secondary mc-3">
-                    <a href="{% url 'blog-home' %}" class="text-decoration-none text-dark">Back to Posts</a>
-                </button>
+
+                <div class="d-inline-block">
+                    <button type="button" class="btn btn-outline-secondary mr-3">
+                        <a href="{% url 'blog-home' %}" class="text-decoration-none text-dark">Back to Posts</a>
+                    </button>
+                </div>
+
+                {% if post.conversation_file %}
+                <div class="d-inline-block">
+                    <button type="button" class="btn btn-outline-secondary">
+                        <a href="{% url 'post-conversation' post.pk %}" class="text-decoration-none text-dark">Read Full Conversation</a>
+                    </button>
+                </div>
+                {% endif %}
 
                 <hr>
 
@@ -29,13 +42,18 @@
 
                 <p class="lead">{{ post.formatted_markdown|safe }}</p>
 
-                {% if post.conversation_file %}
-                <div class="mt-4">
-                    <button type="button" class="btn btn-outline-secondary mr-3">
-                        <a href="{% url 'post-conversation' post.pk %}" class="text-decoration-none text-dark">Read Full Conversation</a>
-                    </button>
-                </div>
-                {% endif %}
+                {% for entry in blocks %}
+                    <!-- illustrate code/conversation -->
+                    {% if entry.type == "text" %}
+                        <p class="lead">{{ entry.content }}</p>
+                    <!-- provide code snippet, formatted -->
+                    {% elif entry.type == "code" %}
+                        <pre><code>{{ entry.content }}</code></pre>
+                    <!-- template conversation, readability -->
+                    {% else %}
+                        {% include 'blog/conversation_block.html' with conversation_slice=entry.content %}
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>

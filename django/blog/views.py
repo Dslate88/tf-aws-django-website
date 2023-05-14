@@ -15,6 +15,9 @@ class HomeView(generic.ListView):
     template_name = "blog/home.html"
     context_object_name = "post_list"
 
+    def get_queryset(self):
+        return Post.objects.order_by('-date_posted')
+
 class AboutView(generic.ListView):
     """
     View for the About page.
@@ -50,34 +53,30 @@ class PostUpdateView(generic.UpdateView):
     fields = ["title", "body"]
     template_name = "blog/post_form.html"
 
+
 class PostDetailView(generic.DetailView):
-    """
-    View for displaying a single blog post in detail.
-    """
     model = Post
     template_name = "blog/post_detail.html"
 
     def get_context_data(self, **kwargs):
-        """
-        If a post has a related conversation file, add the conversation data to the context.
-
-        :param kwargs: Additional keyword arguments
-        :return: context
-        """
         context = super().get_context_data(**kwargs)
-
-        post = get_object_or_404(Post, pk=self.kwargs.get('pk'))
+        post = self.object
         if post.conversation_file:
-            try:
-                with open(f'static/conversations/{post.conversation_file}.json', 'r') as f:
-                    conversation = json.load(f)
-            except FileNotFoundError:
-                conversation = []  # TODO: or handle this error differently
-        else:
-            conversation = [] # TODO: handle
-
-        context['conversation'] = conversation
+            with open(f'static/conversations/{post.conversation_file}', 'r') as f:
+                conversation = json.load(f)
+            conversation_dict = {msg['idx']: msg for msg in conversation}
+            blocks = []
+            # print(post.blocks)
+            for block in post.get_blocks():
+                if block['type'] == 'conversation':
+                    start, end = block['content'].split('-')
+                    block_conversation = [conversation_dict[i] for i in range(int(start), int(end) + 1)]
+                    blocks.append({'type': 'conversation', 'content': block_conversation})
+                else:
+                    blocks.append(block)
+            context['blocks'] = blocks
         return context
+
 
 # TODO: rm and just keep admin?
 class PostDeleteView(generic.DeleteView):
@@ -90,7 +89,7 @@ class PostDeleteView(generic.DeleteView):
 
 class ConversationView(generic.DetailView):
     model = Post
-    template_name = "blog/conversation.html"
+    template_name = "blog/conversation_full.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -98,7 +97,7 @@ class ConversationView(generic.DetailView):
         post = get_object_or_404(Post, pk=self.kwargs.get('pk'))
         if post.conversation_file:
             try:
-                with open(f'static/conversations/{post.conversation_file}.json', 'r') as f:
+                with open(f'static/conversations/{post.conversation_file}', 'r') as f:
                     conversation = json.load(f)
             except FileNotFoundError:
                 conversation = []

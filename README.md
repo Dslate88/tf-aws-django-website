@@ -52,13 +52,4 @@ make requirements
 - render conversations.html via a link for users to read the full exchange if they desire
 - this keeps the post focused on the critical parts of the conversation
 ------------------------------------------------------------------------------
-## TODOs
-- eventually migrate to K8
-- add note on ai generated art
-- add dependency check for vulnerability alerts, dependabot? (do security review while at it...code.envvars.secrets.etc)
-- gitignore requirements.txt
-- add diagrams
-- improve how I am using sqllite, rds replace?
-- review manage.py check --deploy for production readiness
-- either check-in static files or create backup mechanism (upon push, always push to s3?)
-- enable search logic for users to find articles (include tags/categories at this time too?)
+

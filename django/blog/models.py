@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -19,6 +21,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     summary = models.CharField(max_length=500)
     image = models.ImageField(default="kairos_default.jpg")
+
+    blocks = models.TextField(blank=True, null=True)
     conversation_file = models.CharField(max_length=100, null=True, blank=True)
 
     img_size = (2400, 1600)
@@ -56,3 +60,6 @@ class Post(models.Model):
         image = Image.open(self.image.path)
         image.thumbnail(self.img_size)
         image.save(self.image.path)
+
+    def get_blocks(self):
+        return json.loads(self.blocks)
