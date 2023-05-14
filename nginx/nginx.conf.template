@@ -16,6 +16,9 @@ http {
     server ${UPSTREAM_SERVER};
   }
 
+  # Number of worker processes (usually set to the number of CPU cores)
+  # worker_processes auto; Uncomment this line if you want to use it
+
   server {
     listen 80;
 
@@ -42,4 +45,3 @@ http {
     }
   }
 }
-

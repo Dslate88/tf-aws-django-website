@@ -276,3 +276,30 @@ resource "aws_appautoscaling_policy" "ecs_policy" {
     scale_out_cooldown = 300
   }
 }
+
+resource "aws_cloudwatch_metric_alarm" "high_cpu" {
+  alarm_name          = "high_cpu_utilization"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "This metric checks for high CPU utilization in ECS django-webapplication"
+  alarm_actions       = [aws_sns_topic.alarm.arn]
+  dimensions = {
+    ClusterName = aws_ecs_cluster.main.name
+    ServiceName = aws_ecs_service.main.name
+  }
+}
+
+resource "aws_sns_topic" "alarm" {
+  name = "django-high-cpu-utilization"
+}
+
+resource "aws_sns_topic_subscription" "alarm_sms" {
+  topic_arn = aws_sns_topic.alarm.arn
+  protocol  = "sms"
+  endpoint  = var.alert_phone_number
+}

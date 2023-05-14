@@ -1,6 +1,8 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+variable "alert_phone_number" {}
+
 # TODO: django, add post category tags?
 locals {
   stack_name = "django-website"
@@ -70,4 +72,5 @@ module "fargate" {
   pub_subnet_ids     = module.vpc.pub_subnets
   priv_subnet_ids    = module.vpc.priv_subnets
   deploy_ecs_service = local.deploy_ecs_service
+  alert_phone_number = var.alert_phone_number
 }
