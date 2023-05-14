@@ -1,55 +1,60 @@
-#
-------------------------------------------------------------------------------
-## notes to self: user-guide
+# tf-aws-django-website
 
-## pipenv
-- `pipenv shell`, run this when in root repo dir to activate env
-- pipenv clean
-make requirements
+This repository contains the infrastructure as code (IaC) for deploying a Django website on AWS using Terraform. The Django website is containerized using Docker and orchestrated using AWS ECS Fargate.
 
-## ORM management:
-- just do this locally until a db tier is added later (rds?)
-    - python manage.py runserver
-    - python manage.py makemigrations
-    - python manage.py migrate
+## Usage/permission
 
-## markdown media file reference:
-- example:
-    - <img src="http://localhost:8000/media/dalle_ai_surrealist_search.png" style="width:100%; height:auto;"/>
-    - #TODO: test local docker and fargate prod deploys
+This repo was designed for personal use and I am not permitting others to deploy it as-is at this time.
 
-## what should deployment process be??
-- local tf cli, replace with GHA later?
-- container rollout via Fargate, rollback if failure auto...
-- using sqllite for now, so...local compose up on macbook for article editing?
-    - use `make get_db` for now...
-    - TODO: improve on this...
+- In order to share this repo I may refactor it in the future into a stack that others can deploy
+- However, this will not include the django based html that I have customized for my site and style.
 
-## early posting workflow
-- make server, localhost:8000, this will store media/static in django dir
-    - if it looks good, make debug
-    - confirm the post works with compose deploy + nginx, this matches prod as much as possible
-    - make debug env=prod
-    - make auth and make push
-- thoughts on improvements later:
-    - sooner...reduce above steps where you can
-    - later...gitops this...automate it completely
+## Public Repository Purpose
 
-## media and static
-- media via reverse proxy
-- static handled via whitenoise
-   - TODO: css not loading /admin/, staticfiles issue somewhere in prod...whitenoise blame?
+So, you may rightfully ask why have this public at all then? Great question!
 
-## FIX ME FIRST
- - /admin/ in prod, throwing 404 on UN/PW login, it tries to load ImagePIL for Author and not found.  Did I delete it?
+- Having an application that I can continue to evolve is tied to the purpose of my blog, which is researching/experimenting with LLM/AI.
+- The code I share on my blog will be tied to this repo, among others, to give additional context on what I am up to.
 
-## cli tool
-- api calls to dalle2
-- api calls to gpt-4, including conversation storage for django static files, maybe use hte microsoft semantic kernal repo?
+## Architecture
 
-## conversation idea
-- leverage the database model and markdown formatting for the most flexibility
-- render conversations.html via a link for users to read the full exchange if they desire
-- this keeps the post focused on the critical parts of the conversation
-------------------------------------------------------------------------------
+The production architecture of the application is as follows:
 
+- A client makes a secure HTTPS request to the domain.
+- The Application Load Balancer (ALB) receives this request. The ALB has been configured with an SSL certificate from AWS Certificate Manager (ACM). The ALB uses this certificate to decrypt the HTTPS request and turns it into a standard HTTP request.
+- The ALB then forwards this HTTP request to one of the targets in its target group. In this case, these targets are the tasks running in the ECS service.
+
+## Features
+
+- The entire AWS infrastructure is provisioned using Terraform, which provides an efficient way to manage infrastructure as code.
+- The Django website is containerized using Docker, making it easy to manage dependencies and deployment.
+- The application uses AWS Fargate for serverless container execution, removing the need to manage and provision servers.
+- The application is highly available and scalable, with auto scaling configured to handle varying loads.
+- AWS Cloudwatch is used for monitoring and AWS SNS is used for sending alerts.
+- The application is secure with HTTPS enabled, using an SSL certificate provided by AWS Certificate Manager.
+
+
+## django-blog application
+The core of this project is a Django-based blog application.
+
+### Features: implemented
+- Post Creation: Users(currently just myself) can create new blog posts with a title and content.
+- User Authentication: The application includes a user registration and authentication system. Registered users can create and manage their own blog posts.
+- Responsive Design: The blog is designed to be responsive, making it accessible on various devices like desktops, laptops, and mobile phones.
+
+### Features: backlog
+- Categories/Tags: Posts can be categorized or tagged for easy navigation and searchability.
+- Search: Users can search for blog posts based on keywords or tags.
+- Commenting System: Readers can comment on blog posts, facilitating discussions and interactions between the blog post author and readers.
+
+## Design & Frontend
+
+The blog application uses HTML, CSS, and JavaScript for its frontend. The layout is clean and intuitive, making it easy for users to navigate through the blog posts. The use of responsive design principles ensures that the blog is accessible and user-friendly across a range of devices.
+
+### Security
+
+Security is a key focus of this blog application. Django's built-in security features are used extensively, including protection against CSRF, XSS, and SQL Injection attacks. Additionally, the following security measures are also implemented:
+
+- HTTPS: All traffic between the client and the server is encrypted using HTTPS, ensuring the confidentiality and integrity of the data in transit.
+- HSTS: HTTP Strict Transport Security (HSTS) is enabled to ensure that browsers only connect to the server using a secure HTTPS connection.
+- Secure Cookies: The application's cookies are configured to be sent over HTTPS connections only, protecting them from being intercepted over unsecured connections.
