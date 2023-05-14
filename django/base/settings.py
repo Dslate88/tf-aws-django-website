@@ -17,9 +17,6 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-
-# load environment variables from proper .env file
 if os.environ["DEPLOY_ENV"] == "prod":
     environ.Env.read_env(os.path.join(BASE_DIR, ".env.webapp.prod"))
 else:
@@ -27,7 +24,13 @@ else:
 
 env = environ.Env(
     # set casting, default value
-    DEBUG=(bool, False)
+    DEBUG=(bool, False),
+    CSRF_COOKIE_SECURE=(bool, True),
+    USE_I18N=(bool, True),
+    USE_TZ=(bool, True),
+    SECURE_HSTS_INCLUDE_SUBDOMAINS=(bool, True),
+    SESSION_COOKIE_SECURE=(bool, True),
+    SECURE_SSL_REDIRECT=(bool, True),
 )
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS").split(" ")
@@ -46,6 +49,10 @@ LOGIN_REDIRECT_URL = env("LOGIN_REDIRECT_URL")
 CRISPY_TEMPLATE_PACK = env("CRISPY_TEMPLATE_PACK")
 MEDIA_ROOT = os.path.join(BASE_DIR, env("MEDIA_ROOT"))
 MEDIA_URL = env("MEDIA_URL")
+SECURE_HSTS_SECONDS = env("SECURE_HSTS_SECONDS")
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env("SECURE_HSTS_INCLUDE_SUBDOMAINS")
+CSRF_COOKIE_SECURE = env("CSRF_COOKIE_SECURE")
+SESSION_COOKIE_SECURE=env("SESSION_COOKIE_SECURE")
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
@@ -65,12 +72,12 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "base.middleware.HealthCheckMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.security.SecurityMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
