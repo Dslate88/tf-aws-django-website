@@ -45,10 +45,12 @@
                 {% for entry in blocks %}
                     <!-- illustrate code/conversation -->
                     {% if entry.type == "text" %}
-                        <p class="lead">{{ entry.content }}</p>
+                        <p class="lead">{{ entry.content|linebreaks }}</p>
                     <!-- provide code snippet, formatted -->
                     {% elif entry.type == "code" %}
-                        <pre><code>{{ entry.content }}</code></pre>
+                        {% autoescape off %}
+                            <pre><code class="language-python">{{ entry.content }}</code></pre>
+                        {% endautoescape %}
                     <!-- template conversation, readability -->
                     {% else %}
                         {% include 'blog/conversation_block.html' with conversation_slice=entry.content %}
@@ -58,4 +60,5 @@
         </div>
     </div>
 {% endblock %}
+
 
