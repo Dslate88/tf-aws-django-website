@@ -150,7 +150,7 @@ resource "aws_ecs_task_definition" "main" {
       mountPoints = [{
         sourceVolume  = "media_volume"
         containerPath = "/home/app/web/media"
-        readOnly = false
+        readOnly      = false
       }]
 
       logConfiguration = {
@@ -175,7 +175,7 @@ resource "aws_ecs_task_definition" "main" {
 }
 
 resource "aws_ecs_service" "main" {
-  count                              = var.deploy_ecs_service ? 1 : 0
+  # count                              = var.deploy_ecs_service ? 1 : 0
   name                               = "${var.stack_name}-service-${var.env}"
   cluster                            = aws_ecs_cluster.main.id
   task_definition                    = aws_ecs_task_definition.main.arn
@@ -213,17 +213,19 @@ resource "aws_ecs_service" "main" {
   # }
 }
 
-resource "aws_route53_record" "main" {
-  zone_id         = data.aws_route53_zone.main.id
-  name            = "devinslate.com"
-  allow_overwrite = true
-  type            = "A"
-  alias {
-    name                   = aws_lb.main.dns_name
-    zone_id                = aws_lb.main.zone_id
-    evaluate_target_health = false
-  }
-}
+# resource "aws_route53_record" "main" {
+#   zone_id         = data.aws_route53_zone.main.id
+#   name            = "devinslate.com"
+#   allow_overwrite = true
+#   type            = "A"
+#
+#   alias {
+#     name                   = aws_lb.main.dns_name
+#     zone_id                = aws_lb.main.zone_id
+#     evaluate_target_health = false
+#   }
+# }
+
 
 resource "aws_acm_certificate" "cert" {
   domain_name       = "devinslate.com"
@@ -250,4 +252,56 @@ resource "aws_route53_record" "validation" {
   ttl             = 60
   type            = each.value.type
   zone_id         = data.aws_route53_zone.main.zone_id
+}
+
+resource "aws_appautoscaling_target" "ecs_target" {
+  max_capacity       = 10
+  min_capacity       = 1
+  resource_id        = "service/${aws_ecs_cluster.main.name}/${aws_ecs_service.main.name}"
+  scalable_dimension = "ecs:service:DesiredCount"
+  service_namespace  = "ecs"
+}
+
+resource "aws_appautoscaling_policy" "ecs_policy" {
+  name               = "cpu-utilization"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.ecs_target.resource_id
+  scalable_dimension = aws_appautoscaling_target.ecs_target.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.ecs_target.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ECSServiceAverageCPUUtilization"
+    }
+    target_value       = 50.0
+    scale_in_cooldown  = 300
+    scale_out_cooldown = 300
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "high_cpu" {
+  alarm_name          = "high_cpu_utilization"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "CPUUtilization"
+  namespace           = "AWS/ECS"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "This metric checks for high CPU utilization in ECS django-webapplication"
+  alarm_actions       = [aws_sns_topic.alarm.arn]
+  dimensions = {
+    ClusterName = aws_ecs_cluster.main.name
+    ServiceName = aws_ecs_service.main.name
+  }
+}
+
+resource "aws_sns_topic" "alarm" {
+  name = "django-high-cpu-utilization"
+}
+
+resource "aws_sns_topic_subscription" "alarm_sms" {
+  topic_arn = aws_sns_topic.alarm.arn
+  protocol  = "sms"
+  endpoint  = var.alert_phone_number
 }

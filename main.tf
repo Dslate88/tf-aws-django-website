@@ -1,7 +1,10 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
-# TODO: django, add post category tags?
+# TODO: set via .bash_profile, secrets_manager later?
+variable "alert_phone_number" {}
+
+
 locals {
   stack_name = "django-website"
   env        = "dev"
@@ -14,12 +17,8 @@ locals {
 
   pub_cidrs       = ["10.0.0.0/24", "10.0.2.0/24"]
   pub_avail_zones = ["us-east-1a", "us-east-1b"]
-  # pub_cidrs       = ["10.0.0.0/24"]
-  # pub_avail_zones = ["us-east-1a"]
   pub_map_ip = true
 
-  # priv_cidrs       = ["10.0.1.0/24"]
-  # priv_avail_zones = ["us-east-1a"]
   priv_cidrs       = ["10.0.1.0/24", "10.0.3.0/24"]
   priv_avail_zones = ["us-east-1a", "us-east-1b"]
   priv_nat_gateway = true
@@ -29,9 +28,7 @@ locals {
   enable_ecr_api_endpoint = false
   enable_ssm_endpoint     = false
 
-  # ecr
   ecr_containers     = ["django_nginx", "django_webapp"]
-  # deploy_ecs_service = false
   deploy_ecs_service = true
 }
 
@@ -40,7 +37,6 @@ module "vpc" {
   stack_name = local.stack_name
   env        = local.env
 
-  # vpc
   vpc_name             = local.vpc_name
   vpc_cidr             = local.vpc_cidr
   enable_dns_hostnames = local.enable_dns_hostnames
@@ -70,4 +66,5 @@ module "fargate" {
   pub_subnet_ids     = module.vpc.pub_subnets
   priv_subnet_ids    = module.vpc.priv_subnets
   deploy_ecs_service = local.deploy_ecs_service
+  alert_phone_number = var.alert_phone_number
 }
