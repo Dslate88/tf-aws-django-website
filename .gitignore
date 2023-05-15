@@ -27,13 +27,18 @@ django/media
 # db backups
 backups/
 
-# media static files
+# media/static files
 nginx/media/**
 nginx/static/**
 nginx/nginx.conf
+django/static/
+django/media/
 
 # python requirements
 django/requirements.txt
+
+# docs (personal usage details)
+docs/
 
 #################################################
 # generated
