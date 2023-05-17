@@ -21,7 +21,6 @@ from blog.views import PostDetailView, PostCreateView, PostUpdateView, PostDelet
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('markdownx/', include('markdownx.urls')),
     path("", include("blog.urls")),  # temporary
     path("blog/", include("blog.urls")),
     path(
@@ -49,6 +48,7 @@ urlpatterns = [
     path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
     path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
     path('post/<int:pk>/conversation/', ConversationView.as_view(), name='post-conversation'),
+    path('markdownx/', include('markdownx.urls')),
 ]
 
 # django documented recommended pattern

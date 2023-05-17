@@ -64,11 +64,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "whitenoise.runserver_nostatic",
     "django.contrib.staticfiles",
-    "markdownx",
     "blog.apps.BlogConfig",
     "users.apps.UsersConfig",
     "crispy_forms",
     "crispy_bootstrap4",
+    "markdownx",
 ]
 
 MIDDLEWARE = [
