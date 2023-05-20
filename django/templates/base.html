@@ -21,11 +21,19 @@
     body {
         font-family: 'Roboto', sans-serif;
         margin-bottom: 60px;
+        padding-top: 70px;
+        padding-bottom: 70px;
       }
       .footer {
         position: fixed;
         bottom: 0;
         width: 100%;
+      }
+      .header {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000; /* This makes sure the header always stays on top of other elements */
       }
     </style>
 
@@ -67,27 +75,18 @@
 </footer>
 
 
-<header class="site-header">
+<header class="site-header header">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <div class="d-flex justify-content-start">
-          <a class="navbar-brand" href="{% url 'blog-about' %}">
-            About
-          </a>
-        </div>
-
-        <!-- Center element placeholder -->
-        <div class="d-flex justify-content-center">
-          <a class="navbar-brand" href="{% url 'blog-home' %}">
-            <img src="{% static 'images/favicon_v4.png' %}" alt="Brand Icon" width="30" height="30">
-          </a>
-        </div>
-            <div>
-                <!-- Add something appropriate here -->
-          <a class="navbar-brand" href="{% url 'blog-home' %}">
-            Blog
-          </a>
-            </div>
+        <div class="container-fluid d-flex justify-content-center">
+            <a class="navbar-brand mr-2" href="{% url 'blog-about' %}">
+                About
+            </a>
+            <a class="navbar-brand" href="{% url 'blog-home' %}">
+                <img src="{% static 'images/favicon_v4.png' %}" alt="Brand Icon" width="30" height="30">
+            </a>
+            <a class="navbar-brand ml-2" href="{% url 'blog-home' %}">
+                Blog
+            </a>
         </div>
 
         <div class="d-flex justify-content-end">
@@ -163,7 +162,9 @@
 
       <div class="col-4">
         <div class="float-left">
-          <img src="{% static 'images/favicon_v4.png' %}" alt="Brand Icon" width="30" height="30">
+            <a class="navbar-brand" href="{% url 'blog-home' %}">
+                <img src="{% static 'images/favicon_v4.png' %}" alt="Brand Icon" width="30" height="30">
+            </a>
         </div>
       </div>
 
