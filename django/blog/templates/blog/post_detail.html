@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}
   {{ post.title }} | devinslate.com
 {% endblock %}
-
-{% load static %}
 
 {% block content %}
    <div class="container">
@@ -42,20 +42,6 @@
 
                 <p class="lead">{{ post.formatted_markdown|safe }}</p>
 
-                {% for entry in blocks %}
-                    <!-- illustrate code/conversation -->
-                    {% if entry.type == "text" %}
-                        <p class="lead">{{ entry.content|linebreaks }}</p>
-                    <!-- provide code snippet, formatted -->
-                    {% elif entry.type == "code" %}
-                        {% autoescape off %}
-                            <pre><code class="language-python">{{ entry.content }}</code></pre>
-                        {% endautoescape %}
-                    <!-- template conversation, readability -->
-                    {% else %}
-                        {% include 'blog/conversation_block.html' with conversation_slice=entry.content %}
-                    {% endif %}
-                {% endfor %}
             </div>
         </div>
     </div>

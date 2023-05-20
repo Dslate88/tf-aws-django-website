@@ -22,7 +22,6 @@ class Post(models.Model):
     summary = models.CharField(max_length=500)
     image = models.ImageField(default="kairos_default.jpg")
 
-    blocks = models.TextField(blank=True, null=True)
     conversation_file = models.CharField(max_length=100, null=True, blank=True)
 
     img_size = (2400, 1600)

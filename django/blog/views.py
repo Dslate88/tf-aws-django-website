@@ -65,16 +65,7 @@ class PostDetailView(generic.DetailView):
             with open(f'static/conversations/{post.conversation_file}', 'r') as f:
                 conversation = json.load(f)
             conversation_dict = {msg['idx']: msg for msg in conversation}
-            blocks = []
-            # print(post.blocks)
-            for block in post.get_blocks():
-                if block['type'] == 'conversation':
-                    start, end = block['content'].split('-')
-                    block_conversation = [conversation_dict[i] for i in range(int(start), int(end) + 1)]
-                    blocks.append({'type': 'conversation', 'content': block_conversation})
-                else:
-                    blocks.append(block)
-            context['blocks'] = blocks
+            context['conversation'] = conversation_dict
         return context
 
 
