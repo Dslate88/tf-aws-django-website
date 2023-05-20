@@ -26,34 +26,6 @@ class AboutView(generic.ListView):
     template_name = "blog/about.html"
     context_object_name = "profile"
 
-class PostCreateView(generic.CreateView):
-    """
-    View for creating a new blog post.
-    """
-    model = Post
-    fields = ["title", "body"]
-    template_name = "blog/post_form.html"
-
-    def form_valid(self, form):
-        """
-        Add the logged-in user as the author of the post.
-
-        :param form: The form instance
-        :return: super().form_valid(form)
-        """
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-# TODO: rm and just keep admin?
-class PostUpdateView(generic.UpdateView):
-    """
-    View for updating an existing blog post.
-    """
-    model = Post
-    fields = ["title", "body"]
-    template_name = "blog/post_form.html"
-
-
 class PostDetailView(generic.DetailView):
     model = Post
     template_name = "blog/post_detail.html"
@@ -67,16 +39,6 @@ class PostDetailView(generic.DetailView):
             conversation_dict = {msg['idx']: msg for msg in conversation}
             context['conversation'] = conversation_dict
         return context
-
-
-# TODO: rm and just keep admin?
-class PostDeleteView(generic.DeleteView):
-    """
-    View for deleting a blog post.
-    """
-    model = Post
-    template_name = "blog/post_confirm_delete.html"
-    success_url = reverse_lazy("blog-home")
 
 class ConversationView(generic.DetailView):
     model = Post

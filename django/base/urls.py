@@ -15,12 +15,12 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
 from users import views as v
-from blog.views import PostDetailView, PostCreateView, PostUpdateView, PostDeleteView, ConversationView
+from blog.views import PostDetailView, ConversationView
 # TODO: make authorization checks for all routes..add/delete/update/etc...
 
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("portalToDimension/", admin.site.urls),
     path("", include("blog.urls")),  # temporary
     path("blog/", include("blog.urls")),
     path(
@@ -28,25 +28,7 @@ urlpatterns = [
         v.UserProfileView.as_view(template_name="users/profile.html"),
         name="user-profile",
     ),
-    # path(
-    #     "register/",
-    #     v.UserRegisterView.as_view(template_name="users/register.html"),
-    #     name="user-register",
-    # ),
-    path(
-        "login/",
-        auth_views.LoginView.as_view(template_name="users/login.html"),
-        name="user-login",
-    ),
-    path(
-        "logout/",
-        auth_views.LogoutView.as_view(template_name="users/logout.html"),
-        name="user-logout",
-    ),
     path("post/<int:pk>/", PostDetailView.as_view(), name="post-detail"),
-    path("post/add/", PostCreateView.as_view(), name="post-create"),
-    path("post/<int:pk>/update/", PostUpdateView.as_view(), name="post-update"),
-    path("post/<int:pk>/delete/", PostDeleteView.as_view(), name="post-delete"),
     path('post/<int:pk>/conversation/', ConversationView.as_view(), name='post-conversation'),
     path('markdownx/', include('markdownx.urls')),
 ]
