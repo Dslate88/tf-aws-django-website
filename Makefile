@@ -16,7 +16,7 @@ ifeq ($(env),prod)
 	docker-compose -f docker-compose.yml -f docker-compose.prod.yml build --no-cache $(c)
 else
 	cd nginx && ./generate_nginx_conf.sh django:8000
-	docker-compose -f docker-compose.yml build $(c)
+	docker-compose -f docker-compose.yml build --no-cache $(c)
 endif
 
 # TODO: add a grep for nginx prod upstream server setting, exit 1 if its not set for prod env

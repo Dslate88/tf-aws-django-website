@@ -18,7 +18,7 @@
     </style>
 
     {% for post in post_list %}
-        <div class="card mb-4 border-dark border-2" style="margin-left: auto; margin-right: auto; width: 60%; height:60%">
+        <div class="card mb-4 border-dark border-2" style="margin-left: auto; margin-right: auto;" >
             <img class="rounded-square img-fluid" src="{{ post.image.url }}" alt={{post.title}}>
           <div class="card-body">
               <h5 class="card-title">{{post.title}}</h5>
