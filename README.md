@@ -1,4 +1,5 @@
 # tf-aws-django-website
+I created this website to support my ongoing research and experimentaiton with AI/LLM's.  Its not currently deployed for this purpose because i've created an application/ecosystem at work in the space of AI and am actively pouring my time/energy into scaling it out to hundreds of users.
 
 This repository contains the infrastructure as code (IaC) for deploying a Django website on AWS using Terraform. The Django website is containerized using Docker and orchestrated using AWS ECS Fargate.
 
